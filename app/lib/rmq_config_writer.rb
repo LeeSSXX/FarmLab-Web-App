@@ -12,7 +12,7 @@
 #           need to refresh/create cumbersome config files.
 class RmqConfigWriter
   CONFIG_PATH = "docker_volumes/rabbit"
-  CONFIG_FILENAME = "farmbot_rmq_config.conf"
+  CONFIG_FILENAME = "farmbot_rmq_config.bak"
   CONFIG_OUTPUT = "#{CONFIG_PATH}/#{CONFIG_FILENAME}"
   NO_API_HOST = "\nYou MUST set API_HOST to a real IP address or " +
                 "domain name (not localhost).\n" +

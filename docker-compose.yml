@@ -52,8 +52,8 @@ services:
     build:
       context: "."
       dockerfile: docker_configs/api.Dockerfile
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec passenger start -p $API_PORT"
-    ports: ["${API_PORT}:${API_PORT}"]
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec passenger start"
+    ports: ["3000:3000"]
 
   mqtt:
     env_file: ".env"
