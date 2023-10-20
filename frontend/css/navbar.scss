@@ -27,12 +27,13 @@ nav {
 
 .nav-coordinates {
   font-style: italic;
-  color: $white;
-  line-height: 0;
-  float: left;
-  margin-top: 2.1rem;
-  border-radius: 10px;
-  padding: 1rem 0.5rem;
+  img {
+    height: 1.5rem;
+    width: 1.5rem;
+    filter: brightness(0%) invert(100%);
+    opacity: 0.8;
+    margin-bottom: 0.1rem;
+  }
 }
 
 .links {
@@ -165,32 +166,78 @@ nav {
 .nav-right {
   height: 5rem;
   overflow: hidden;
+  .nav-coordinates,
   .jobs-button,
   .setup-button,
   .connectivity-button {
-    display: inline;
-    border: 1px solid $white;
+    display: flex;
+    position: relative;
+    gap: 1rem;
+    align-items: center;
+    height: 2.9rem;
+    overflow: hidden;
     border-radius: 5px;
-    padding: 0.8rem;
-    font-weight: bold;
-    font-size: 1.1rem;
-    color: $white;
     margin-right: 0.75rem;
     margin-left: 0.5rem;
+    padding-left: 0.8rem;
+    padding-right: 0.8rem;
+    font-weight: bold;
+    font-size: 1.1rem;
+    line-height: 3rem;
+    color: $light_gray;
+    background: $medium_gray;
+    &.hover,
     &:hover {
-      background: $medium_gray;
+      color: $white;
+      .jobs-button-progress-text,
+      .title,
+      p {
+        color: $white;
+      }
+      box-shadow: 0 0 10px $translucent5, 0 0 5px inset rgba(255, 255, 255, 0.2);
+    }
+  }
+  .nav-coordinates {
+    p {
+      display: inline;
+      color: $light_gray;
+    }
+    img,
+    p {
+      position: relative;
+      z-index: 1;
+    }
+    .movement-progress {
+      top: 0;
+      left: 0;
+      background: $placeholder_gray;
+      border-radius: 0;
     }
   }
   .setup-button {
-    line-height: 6rem;
+    display: inline-block;
+    margin-top: 1.5rem;
   }
   .jobs-button {
     position: relative;
+    .nav-job-info {
+      display: inline;
+    }
+    .fa-history,
+    .nav-job-info {
+      position: relative;
+      z-index: 1;
+      margin-right: 0;
+    }
     .jobs-button-progress-text,
     .title {
-      display: inline;
-      color: $white;
+      display: inline-block;
+      color: $light_gray;
       font-weight: bold;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
     }
     .jobs-button-progress-text {
       margin-left: 1.5rem;
@@ -199,32 +246,19 @@ nav {
       position: absolute;
       top: 0;
       left: 0;
-      z-index: -1;
       height: 100%;
-      background: $medium_gray;
+      background: $placeholder_gray;
     }
   }
   .connectivity-button {
     p {
       display: inline;
-      color: $white;
+      color: $light_gray;
       font-weight: bold;
-    }
-  }
-  @media screen and (max-width: 450px) {
-    .connectivity-button {
-      border: none;
-      p {
-        display: none;
-      }
     }
   }
   .connection-status-popover {
     display: inline;
-    .bp4-popover-wrapper {
-      line-height: 6rem;
-      margin-top: 0;
-    }
   }
   a {
     font-weight: normal;
@@ -252,9 +286,19 @@ nav {
   }
 }
 
+.nav-popup-button-wrapper {
+  display: inline;
+  span:first-of-type {
+    margin-top: 0.75rem;
+  }
+}
+
 .menu-popover {
   display: inline;
-  .bp4-popover-content {
+  .bp5-popover-wrapper {
+    margin-left: 1.25rem;
+  }
+  .bp5-popover-content {
     position: relative;
     width: 22rem;
     background: $dark_gray;
@@ -297,7 +341,7 @@ nav {
       }
     }
   }
-  .bp4-popover-arrow {
+  .bp5-popover-arrow {
     visibility: hidden;
   }
 }

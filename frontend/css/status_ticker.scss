@@ -7,7 +7,11 @@
   background: $black;
   opacity: 0.9;
   min-height: 3.25rem;
-  .bp4-collapse {
+  cursor: pointer;
+  label {
+    cursor: pointer;
+  }
+  .bp5-collapse {
     width: 100% !important;
     overflow-y: scroll !important;
     max-height: 20rem !important;

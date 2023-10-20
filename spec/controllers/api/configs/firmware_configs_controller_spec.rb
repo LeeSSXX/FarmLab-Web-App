@@ -13,9 +13,9 @@ describe Api::FirmwareConfigsController do
       get :show, format: :json
       expect(response.status).to eq(200)
       {
-        encoder_enabled_x: 0,
-        encoder_enabled_y: 0,
-        encoder_enabled_z: 0,
+        encoder_enabled_x: 1,
+        encoder_enabled_y: 1,
+        encoder_enabled_z: 1,
         encoder_invert_x: 0,
         encoder_invert_y: 0,
         encoder_invert_z: 0,
@@ -78,9 +78,9 @@ describe Api::FirmwareConfigsController do
         movement_stop_at_max_x: 1,
         movement_stop_at_max_y: 1,
         movement_stop_at_max_z: 1,
-        movement_timeout_x: 120,
-        movement_timeout_y: 120,
-        movement_timeout_z: 120,
+        movement_timeout_x: 180,
+        movement_timeout_y: 180,
+        movement_timeout_z: 180,
         param_config_ok: 0,
         param_e_stop_on_mov_err: 0,
         param_mov_nr_retry: 3,

@@ -23,7 +23,6 @@ import {
 } from "../default_values";
 import { PAGE_SLUGS } from "../../internal_urls";
 import { DevSettings } from "../dev/dev_support";
-import { User } from "farmbot/dist/resources/api_resources";
 
 export const AccountSettings = (props: AccountSettingsProps) =>
   <Highlight className={"section"}
@@ -86,11 +85,11 @@ export const AccountSettings = (props: AccountSettingsProps) =>
             <BlurableInput
               type="text"
               name="language"
-              value={props.user.body["language" as keyof User] || ""}
+              value={props.user.body.language || ""}
               onCommit={e => {
                 props.dispatch(edit(
                   props.user,
-                  { ["language" as keyof User]: e.currentTarget.value }));
+                  { language: e.currentTarget.value }));
                 props.dispatch(save(props.user.uuid));
               }} />
           </Col>
@@ -150,11 +149,6 @@ const APP_SETTINGS = (): SettingDescriptionProps[] => ([
     title: DeviceSetting.showSecondsInTime,
     description: Content.TIME_FORMAT_SECONDS,
     setting: BooleanSetting.time_format_seconds,
-  },
-  {
-    title: DeviceSetting.hideWebcamWidget,
-    description: Content.HIDE_WEBCAM_WIDGET,
-    setting: BooleanSetting.hide_webcam_widget,
   },
   {
     title: DeviceSetting.hideSensorsPanel,

@@ -79,7 +79,6 @@ import {
 } from "../settings/hardware_settings/axis_tracking_status";
 import { destroy, edit, initSave, save } from "../api/crud";
 import { FlashFirmwareBtn } from "../settings/firmware/firmware_hardware_status";
-import { AxisDisplayGroup } from "../controls/axis_display_group";
 import {
   ORIGIN_DROPDOWNS, SPECIAL_VALUE_DDI,
 } from "../photos/camera_calibration/constants";
@@ -100,18 +99,17 @@ import {
 } from "../farm_designer/map/tool_graphics/all_tools";
 import { WaterFlowRateInput } from "../tools/edit_tool";
 import { RPI_OPTIONS } from "../settings/fbos_settings/rpi_model";
-import { User } from "farmbot/dist/resources/api_resources";
 
 export const Language = (props: WizardStepComponentProps) => {
   const user = getUserAccountSettings(props.resources);
   return <BlurableInput
     type="text"
     name="language"
-    value={user.body["language" as keyof User] || ""}
+    value={user.body.language || ""}
     onCommit={e => {
       props.dispatch(edit(
         user,
-        { ["language" as keyof User]: e.currentTarget.value }));
+        { language: e.currentTarget.value }));
       props.dispatch(save(user.uuid));
     }} />;
 };
@@ -635,31 +633,6 @@ export const SetHome = (axis: Xyz) => (props: WizardStepComponentProps) => {
   </LockableButton>;
 };
 
-export const CurrentPosition = (axis: Xyz) => (props: WizardStepComponentProps) => {
-  const locationData = validBotLocationData(props.bot.hardware.location_data);
-  const firmwareSettings = getFirmwareConfig(props.resources);
-  return <div className={"bot-position-rows"}>
-    <div className={"axis-titles"}>
-      <Row>
-        <Col xs={3}>
-          <label>{t("X AXIS")}</label>
-        </Col>
-        <Col xs={3}>
-          <label>{t("Y AXIS")}</label>
-        </Col>
-        <Col xs={3}>
-          <label>{t("Z AXIS")}</label>
-        </Col>
-      </Row>
-    </div>
-    <AxisDisplayGroup
-      position={locationData.position}
-      firmwareSettings={firmwareSettings?.body}
-      label={t("Current position (mm)")}
-      highlightAxis={axis} />
-  </div>;
-};
-
 export const AxisActions = (props: WizardStepComponentProps) => {
   const locationData = validBotLocationData(props.bot.hardware.location_data);
   const firmwareSettings = getFirmwareConfig(props.resources)?.body;
@@ -671,6 +644,7 @@ export const AxisActions = (props: WizardStepComponentProps) => {
   const { busy, locked } = props.bot.hardware.informational_settings;
   return <BotPositionRows
     locationData={locationData}
+    showCurrentPosition={true}
     getConfigValue={props.getConfigValue}
     sourceFwConfig={sourceFwConfig}
     arduinoBusy={busy}

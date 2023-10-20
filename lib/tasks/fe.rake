@@ -3,35 +3,20 @@ DEPS_KEY          = "dependencies"
 DEV_DEPS_KEY      = "devDependencies"
 EXCLUDE = [
   {
-    packages: ["react", "react-dom", "react-test-renderer", "cheerio"],
-    reason: "enzyme",
-    version: "3.11.0 (latest working)",
-  },
-  {
     packages: ["@types/enzyme"],
     reason: "@types/react",
-    version: "18.2.13 (errors)",
-  },
-  {
-    packages: ["@types/react"],
-    reason: "@blueprintjs/popover2",
-    version: "1.14.11 (error)",
-  },
-  {
-    packages: ["typescript"],
-    reason: "typescript",
-    version: "5.1.3 (crash)",
+    version: "3.10.12 (latest working)",
   },
 ]
 
 # Load package.json as JSON.
 def load_package_json()
-  return JSON.parse(URI.open(PACKAGE_JSON_FILE).read)
+  return JSON.parse(File.open(PACKAGE_JSON_FILE).read)
 end
 
 # Save JSON to package.json.
 def save_package_json(json)
-  URI.open(PACKAGE_JSON_FILE, "w") { |file|
+  File.open(PACKAGE_JSON_FILE, "w") { |file|
     file.write(JSON.pretty_generate(json))
     file.puts
   }

@@ -4,17 +4,20 @@ import {
   DesignerPanel, DesignerPanelContent, DesignerPanelTop,
 } from "../farm_designer/designer_panel";
 import { Panel, DesignerNavTabs } from "../farm_designer/panel_header";
-import { Everything, TimeSettings } from "../interfaces";
+import { Everything, JobsAndLogsState, TimeSettings } from "../interfaces";
 import {
-  BytesProgress, Dictionary, JobProgress, PercentageProgress,
+  BytesProgress, Dictionary, JobProgress, PercentageProgress, TaggedLog,
 } from "farmbot";
 import { t } from "../i18next_wrapper";
 import { maybeGetTimeSettings } from "../resources/selectors";
 import moment from "moment";
 import { betterCompact, formatTime } from "../util";
 import { Color } from "../ui";
-import { round, sortBy } from "lodash";
-import { Content } from "../constants";
+import { cloneDeep, round, sortBy } from "lodash";
+import { Actions } from "../constants";
+import { BotState, SourceFbosConfig } from "./interfaces";
+import { GetWebAppConfigValue } from "../config_storage/actions";
+import { LogsPanel } from "../logs";
 
 export interface JobsPanelProps {
   jobs: Dictionary<JobProgress | undefined>;
@@ -41,6 +44,63 @@ export class RawJobsPanel extends React.Component<JobsPanelProps, {}> {
 
 export const JobsPanel = connect(mapStateToProps)(RawJobsPanel);
 
+export interface JobsAndLogsProps {
+  dispatch: Function;
+  logs: TaggedLog[];
+  timeSettings: TimeSettings;
+  sourceFbosConfig: SourceFbosConfig;
+  getConfigValue: GetWebAppConfigValue;
+  bot: BotState;
+  fbosVersion: string | undefined;
+  jobsPanelState: JobsAndLogsState;
+  jobs: Dictionary<JobProgress | undefined>;
+}
+
+export class JobsAndLogs
+  extends React.Component<JobsAndLogsProps> {
+
+  setPanelState = (key: keyof JobsAndLogsState) => () =>
+    this.props.dispatch({
+      type: Actions.SET_JOBS_PANEL_OPTION,
+      payload: key,
+    });
+
+  Jobs = () => {
+    return <div className={"jobs-tab"}>
+      <JobsTable jobs={this.props.bot.hardware.jobs}
+        timeSettings={this.props.timeSettings} />
+    </div>;
+  };
+
+  Logs = () => {
+    return <div className={"logs-tab"}>
+      <LogsPanel
+        logs={this.props.logs}
+        timeSettings={this.props.timeSettings}
+        dispatch={this.props.dispatch}
+        sourceFbosConfig={this.props.sourceFbosConfig}
+        getConfigValue={this.props.getConfigValue}
+        bot={this.props.bot}
+        fbosVersion={this.props.fbosVersion}
+      />
+    </div>;
+  };
+
+  render() {
+    const { jobs, logs } = this.props.jobsPanelState;
+    return <div className={"jobs-and-logs"}>
+      <div className={"tabs"}>
+        <label className={jobs ? "selected" : ""}
+          onClick={this.setPanelState("jobs")}>{t("jobs")}</label>
+        <label className={logs ? "selected" : ""}
+          onClick={this.setPanelState("logs")}>{t("logs")}</label>
+      </div>
+      {jobs && <this.Jobs />}
+      {logs && <this.Logs />}
+    </div>;
+  }
+}
+
 export interface JobsTableProps {
   jobs: Dictionary<JobProgress | undefined>;
   timeSettings: TimeSettings;
@@ -56,19 +116,16 @@ export const JobsTable = (props: JobsTableProps) => {
         <th>{t("Job")}</th>
         {props.more && <th>{t("Type")}</th>}
         {props.more && <th>{t("ext")}</th>}
-        <th>{props.more ? t("Progress") : "%"}</th>
+        <th className={"right-align"}>{props.more ? t("Progress") : "%"}</th>
         <th>{t("Status")}</th>
         {props.more && <th>{t("Time")}</th>}
-        <th>{t("Duration")}</th>
+        <th className={"right-align"}>
+          <i className={"fa fa-clock-o"} title={t("duration")} />
+        </th>
       </tr>
     </thead>
     <tbody>
       {sortedJobs.active.map(JobRow)}
-      <tr>
-        <td colSpan={props.more ? 7 : 6} className={"job-clear-notice"}>
-          <i>{t(Content.OLD_JOBS_CLEARED)}</i>
-        </td>
-      </tr>
       {sortedJobs.inactive.map(JobRow)}
     </tbody>
   </table>;
@@ -87,7 +144,7 @@ const Job = (props: JobProps) => (job: JobProgressWithTitle) => {
       {props.more ? job.title : jobNameLookup(job)}</td>
     {props.more && <td>{job.type}</td>}
     {props.more && <td>{job.file_type}</td>}
-    <td>
+    <td className={"right-align"}>
       {job.unit == "percent" ? `${round(job[job.unit], 1)}%` : job[job.unit]}
       <div className={"progress"}
         style={percent
@@ -95,11 +152,11 @@ const Job = (props: JobProps) => (job: JobProgressWithTitle) => {
           : {}} />
     </td>
     <td>{job.status}</td>
-    {props.more && <td title={`${job.time} (${moment(job.time)})`}>
+    {props.more && <td title={`${job.time} (${moment(job.time).toString()})`}>
       {job.time
         ? formatTime(moment(job.time), props.timeSettings)
         : ""}</td>}
-    <td>{duration(job)}</td>
+    <td className={"right-align"}>{duration(job)}</td>
   </tr>;
 };
 
@@ -128,8 +185,9 @@ export const jobNameLookup = (job: JobProgressWithTitle | undefined) => {
 };
 
 export const addTitleToJobProgress = ([title, job]: [string, JobProgress]) => {
-  (job as JobProgressWithTitle).title = title;
-  return (job as JobProgressWithTitle);
+  const jobWithTitle = cloneDeep(job) as JobProgressWithTitle;
+  jobWithTitle.title = title;
+  return jobWithTitle;
 };
 
 export const sortJobs =

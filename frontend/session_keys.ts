@@ -22,6 +22,7 @@ export const BooleanSetting: BooleanSettings = {
   raw_encoders: "raw_encoders",
   home_button_homing: "home_button_homing",
   show_motor_plot: "show_motor_plot",
+  show_missed_step_plot: "show_missed_step_plot",
 
   /** Designer settings */
   legend_menu_open: "legend_menu_open",
