@@ -177,11 +177,14 @@ fieldset {
 .controls-content,
 .connectivity-content {
   margin-bottom: 0;
+  padding-top: 2rem !important;
   .tabs {
     display: flex;
-    position: sticky;
-    top: 0;
+    position: absolute;
+    top: 1rem;
+    left: 0;
     z-index: 3;
+    width: 100%;
     background: $white;
     padding-bottom: 0.5rem;
     :first-child {
@@ -205,7 +208,7 @@ fieldset {
       color: $medium_gray;
       width: 50%;
       text-align: center;
-      margin-top: -1rem;
+      margin-top: 0;
       cursor: pointer;
       &.selected {
         background: $medium_gray;
@@ -832,6 +835,16 @@ fieldset {
   }
 }
 
+.move-tab,
+.peripherals-tab,
+.webcams-tab {
+  margin-top: 1rem;
+}
+
+.webcams-tab {
+  margin-top: 2rem;
+}
+
 .peripherals-tab {
   overflow-y: scroll;
   overflow-x: hidden;
@@ -1040,7 +1053,7 @@ ul {
 
 .button-group {
   display: inline-block;
-  margin: 1rem 0 -1rem;
+  margin: 1.5rem 0 -1rem;
   width: 100%;
   button:not(:first-of-type) {
     margin-right: 1rem;
@@ -1048,13 +1061,17 @@ ul {
   .run-btn {
     margin-right: 0.5rem;
   }
+  .fb-button {
+    margin: 0;
+  }
   .settings-menu-button {
-    margin-right: 1rem;
     margin-top: 0.15rem;
+    margin-right: 0.5rem;
+    .bp5-popover-wrapper {
+      margin-left: 0;
+    }
   }
   .fa {
-    margin: 0 0.75rem;
-    line-height: 2rem;
     float: right;
   }
   .fa-code {
@@ -1064,27 +1081,27 @@ ul {
       color: $dark_gray;
     }
   }
-  .fa-trash {
-    color: $darkest_red;
-  }
-  .fa-clone,
-  .fa-copy {
-    color: $yellow;
-  }
-  .fa-eye {
-    color: $orange;
+  .inactive {
+    color: $gray;
   }
   .fa-eye-slash {
     color: $gray;
   }
   .color-picker {
-    margin: 0 0.5rem;
     float: right;
     vertical-align: middle;
     .saucer {
       height: 1.5rem;
       width: 1.5rem;
     }
+  }
+}
+
+.button-group,
+.panel-header-icon-group {
+  .fa-spinner {
+    background: none !important;
+    box-shadow: none !important;
   }
 }
 
@@ -1940,6 +1957,9 @@ ul {
   }
   .sensor-list {
     min-width: 33rem;
+    .fb-button {
+      white-space: unset;
+    }
   }
   .sensor-reading-display {
     &.moisture-sensor {
@@ -2297,6 +2317,9 @@ ul {
   margin: auto;
   max-width: 300px;
   margin-top: 1rem;
+  .fb-button {
+    margin: 0;
+  }
 }
 
 .location-form {
@@ -2311,6 +2334,8 @@ ul {
 }
 
 .custom-coordinate-form {
+  margin-left: -3rem;
+  margin-right: -1rem;
   .x,
   .y,
   .z {
