@@ -19,7 +19,7 @@ class IncreaseLuaCodeLengthLimit < ActiveRecord::Migration[6.1]
 
   def up
     hack do
-      change_column :edge_nodes, :value, :string, limit: 3000
+      change_column :edge_nodes, :value, :string, limit: 5000
     end
   end
 
