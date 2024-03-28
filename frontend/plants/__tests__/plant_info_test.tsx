@@ -98,7 +98,7 @@ describe("<PlantInfo />", () => {
   it("gets template id", () => {
     mockPath = Path.mock(Path.plantTemplates(2));
     const p = fakeProps();
-    p.openedSavedGarden = "uuid";
+    p.openedSavedGarden = 1;
     const wrapper = mount<PlantInfo>(<PlantInfo {...p} />);
     expect(wrapper.instance().stringyID).toEqual("2");
   });
@@ -150,7 +150,7 @@ describe("<PlantInfo />", () => {
 
   it("destroys plant", () => {
     const wrapper = mount<PlantInfo>(<PlantInfo {...fakeProps()} />);
-    wrapper.instance().destroy("uuid");
+    wrapper.instance().destroy("uuid")();
     expect(destroy).toHaveBeenCalledWith("uuid", false);
   });
 
@@ -158,7 +158,7 @@ describe("<PlantInfo />", () => {
     const p = fakeProps();
     p.getConfigValue = jest.fn(() => false);
     const wrapper = mount<PlantInfo>(<PlantInfo {...p} />);
-    wrapper.instance().destroy("uuid");
+    wrapper.instance().destroy("uuid")();
     expect(destroy).toHaveBeenCalledWith("uuid", true);
   });
 });

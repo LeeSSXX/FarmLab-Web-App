@@ -26,8 +26,8 @@ import {
 
 /** Open or close a SavedGarden. */
 const GardenViewButton = (props: GardenViewButtonProps) => {
-  const { dispatch, savedGarden, gardenIsOpen } = props;
-  const onClick = openOrCloseGarden({ savedGarden, gardenIsOpen, dispatch });
+  const { dispatch, savedGardenId, gardenIsOpen } = props;
+  const onClick = openOrCloseGarden({ savedGardenId, gardenIsOpen, dispatch });
   const btnText = gardenIsOpen
     ? t("exit")
     : t("view");
@@ -54,12 +54,9 @@ const ApplyGardenButton =
 
 const DestroyGardenButton =
   (props: { dispatch: Function, gardenUuid: string }) =>
-    <button
-      className="fb-button red"
+    <i className={"fa fa-trash fb-icon-button"}
       title={t("delete garden")}
-      onClick={() => props.dispatch(destroySavedGarden(props.gardenUuid))}>
-      {t("delete")}
-    </button>;
+      onClick={() => props.dispatch(destroySavedGarden(props.gardenUuid))} />;
 
 const findSavedGardenByUrl = (ri: ResourceIndex) => {
   const id = Path.getSlug(Path.savedGardens());
@@ -74,7 +71,7 @@ export const mapStateToProps = (props: Everything): EditGardenProps => {
   const savedGarden = findSavedGardenByUrl(props.resources.index);
   return {
     savedGarden,
-    gardenIsOpen: !!(savedGarden?.uuid === openedSavedGarden),
+    gardenIsOpen: !!(savedGarden?.body.id === openedSavedGarden),
     dispatch: props.dispatch,
     plantPointerCount: selectAllPlantPointers(props.resources.index).length,
     gardenPlants: selectAllPlantTemplates(props.resources.index)
@@ -108,7 +105,22 @@ export class RawEditGarden
         panelName={"saved-garden"}
         panel={Panel.SavedGardens}
         title={t("Edit garden")}
-        backTo={plantsPath} />
+        backTo={plantsPath}>
+        {savedGarden &&
+          <div className={"buttons"}>
+            <ApplyGardenButton
+              dispatch={this.props.dispatch}
+              plantPointerCount={this.props.plantPointerCount}
+              gardenId={savedGarden.body.id || -1} />
+            <DestroyGardenButton
+              dispatch={this.props.dispatch}
+              gardenUuid={savedGarden.uuid} />
+            <GardenViewButton
+              dispatch={this.props.dispatch}
+              savedGardenId={savedGarden.body.id}
+              gardenIsOpen={this.props.gardenIsOpen} />
+          </div>}
+      </DesignerPanelHeader>
       <DesignerPanelContent panelName={"saved-garden-edit"}>
         {savedGarden
           ? <div className={"saved-garden-content"}>
@@ -134,19 +146,6 @@ export class RawEditGarden
                   }));
                   this.props.dispatch(save(savedGarden.uuid));
                 }} />
-            </Row>
-            <Row>
-              <ApplyGardenButton
-                dispatch={this.props.dispatch}
-                plantPointerCount={this.props.plantPointerCount}
-                gardenId={savedGarden.body.id || -1} />
-              <DestroyGardenButton
-                dispatch={this.props.dispatch}
-                gardenUuid={savedGarden.uuid} />
-              <GardenViewButton
-                dispatch={this.props.dispatch}
-                savedGarden={savedGarden.uuid}
-                gardenIsOpen={this.props.gardenIsOpen} />
             </Row>
           </div>
           : <p>{t("Garden not found.")}</p>}

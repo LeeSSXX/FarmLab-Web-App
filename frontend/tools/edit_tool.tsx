@@ -104,21 +104,8 @@ export class RawEditTool extends React.Component<EditToolProps, EditToolState> {
     const activeOrMounted = this.props.isActive(tool.body.id) || isMounted;
     const nameTaken = this.props.existingToolNames
       .filter(x => x != tool.body.name).includes(toolName);
-    return <this.PanelWrapper>
-      <div className="edit-tool">
-        <ToolSVG toolName={toolName} profile={true} />
-        <CustomToolGraphicsInput
-          toolName={toolName}
-          dispatch={this.props.dispatch}
-          saveFarmwareEnv={this.props.saveFarmwareEnv}
-          env={this.props.env} />
-        <label>{t("Name")}</label>
-        <input name="name"
-          value={toolName}
-          onChange={e => this.setState({ toolName: e.currentTarget.value })} />
-        {reduceToolName(toolName) == ToolName.wateringNozzle &&
-          <WaterFlowRateInput value={this.state.flowRate}
-            onChange={this.changeFlowRate} />}
+    return <this.PanelWrapper
+      headerElement={<div className={"tool-action-btn-group"}>
         <SaveBtn
           onClick={() => {
             this.props.dispatch(edit(tool, {
@@ -130,31 +117,49 @@ export class RawEditTool extends React.Component<EditToolProps, EditToolState> {
           }}
           disabled={!toolName || nameTaken}
           status={SpecialStatus.DIRTY} />
+        <i
+          className={`fa fa-trash fb-icon-button ${activeOrMounted
+            ? "pseudo-disabled"
+            : ""}`}
+          title={activeOrMounted ? message : t("delete")}
+          onClick={() => activeOrMounted
+            ? error(t(message))
+            : dispatch(destroy(tool.uuid))} />
+      </div>}>
+      <div className="edit-tool">
+        <ToolSVG toolName={toolName} profile={true} />
+        <CustomToolGraphicsInput
+          toolName={toolName}
+          dispatch={this.props.dispatch}
+          saveFarmwareEnv={this.props.saveFarmwareEnv}
+          env={this.props.env} />
+        <label>{t("Name")}</label>
+        <input name="toolName"
+          value={toolName}
+          onChange={e => this.setState({ toolName: e.currentTarget.value })} />
+        {reduceToolName(toolName) == ToolName.wateringNozzle &&
+          <WaterFlowRateInput value={this.state.flowRate}
+            onChange={this.changeFlowRate} />}
         <p className="name-error">
           {nameTaken ? t("Name already taken.") : ""}
         </p>
       </div>
-      <button
-        className={`fb-button red no-float ${activeOrMounted
-          ? "pseudo-disabled"
-          : ""}`}
-        title={activeOrMounted ? message : t("delete")}
-        onClick={() => activeOrMounted
-          ? error(t(message))
-          : dispatch(destroy(tool.uuid))}>
-        {t("Delete")}
-      </button>
     </this.PanelWrapper>;
   };
 
-  PanelWrapper = (props: { children: React.ReactChild | React.ReactChild[] }) => {
+  PanelWrapper = (props: {
+    children: React.ReactChild | React.ReactChild[],
+    headerElement?: React.ReactElement,
+  }) => {
     const panelName = "edit-tool";
     return <DesignerPanel panelName={panelName} panel={Panel.Tools}>
       <DesignerPanelHeader
         panelName={panelName}
         title={t("Edit tool")}
         backTo={Path.tools()}
-        panel={Panel.Tools} />
+        panel={Panel.Tools}>
+        {props.headerElement}
+      </DesignerPanelHeader>
       <DesignerPanelContent panelName={panelName}>
         {props.children}
       </DesignerPanelContent>

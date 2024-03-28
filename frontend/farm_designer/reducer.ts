@@ -54,6 +54,7 @@ export const initialState: DesignerState = {
   hoveredMapImage: undefined,
   cameraViewGridId: undefined,
   gridIds: [],
+  gridStart: { x: 100, y: 100 },
   soilHeightLabels: false,
   profileOpen: false,
   profileAxis: "x",
@@ -188,7 +189,7 @@ export const designer = generateReducer<DesignerState>(initialState)
       push(Path.location({ x: payload.x, y: payload.y }));
     return s;
   })
-  .add<string | undefined>(Actions.CHOOSE_SAVED_GARDEN, (s, { payload }) => {
+  .add<number | undefined>(Actions.CHOOSE_SAVED_GARDEN, (s, { payload }) => {
     s.openedSavedGarden = payload;
     return s;
   })
@@ -260,6 +261,10 @@ export const designer = generateReducer<DesignerState>(initialState)
     s.gridIds = s.gridIds.includes(payload)
       ? s.gridIds.filter(id => payload != id)
       : s.gridIds.concat(payload);
+    return s;
+  })
+  .add<Record<"x" | "y", number>>(Actions.SET_GRID_START, (s, { payload }) => {
+    s.gridStart = payload;
     return s;
   })
   .add<boolean>(Actions.TOGGLE_SOIL_HEIGHT_LABELS, (s) => {

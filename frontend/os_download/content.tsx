@@ -42,35 +42,35 @@ interface PlatformContent {
 
 const PLATFORM_DATA = (): PlatformContent[] => [
   {
-    computer: "Raspberry Pi 3\nRaspberry Pi Zero 2 W",
-    imageUrl: RPI3().imageUrl,
-    releaseTag: RPI3().releaseTag,
-    kits: [
-      "Genesis v1.2",
-      "Genesis v1.3",
-      "Genesis v1.4",
-      "Genesis v1.5",
-      "Genesis v1.6 (black cable)",
-      "Genesis XL v1.4",
-      "Genesis XL v1.5",
-      "Genesis XL v1.6 (black cable)",
-      "Express v1.1 (USB)",
-      "Express v1.2 (USB)",
-      "Express XL v1.1 (USB)",
-      "Express XL v1.2 (USB)",
-    ],
-  },
-  {
     computer: "Raspberry Pi 4",
     imageUrl: RPI4().imageUrl,
     releaseTag: RPI4().releaseTag,
     kits: [
-      "Genesis v1.6.1 (white cable)",
-      "Genesis XL v1.6.1 (white cable)",
-      "Genesis v1.6.2 (white cable or 2 HDMI ports)",
-      "Genesis XL v1.6.2 (white cable or 2 HDMI ports)",
       "Genesis v1.7",
       "Genesis XL v1.7",
+      "Genesis v1.6.2 (white cable or 2 HDMI ports)",
+      "Genesis XL v1.6.2 (white cable or 2 HDMI ports)",
+      "Genesis v1.6.1 (white cable)",
+      "Genesis XL v1.6.1 (white cable)",
+    ],
+  },
+  {
+    computer: "Raspberry Pi 3\nRaspberry Pi Zero 2 W",
+    imageUrl: RPI3().imageUrl,
+    releaseTag: RPI3().releaseTag,
+    kits: [
+      "Genesis v1.6 (black cable)",
+      "Genesis XL v1.6 (black cable)",
+      "Genesis v1.5",
+      "Genesis XL v1.5",
+      "Genesis v1.4",
+      "Genesis XL v1.4",
+      "Genesis v1.3",
+      "Genesis v1.2",
+      "Express v1.2 (USB)",
+      "Express XL v1.2 (USB)",
+      "Express v1.1 (USB)",
+      "Express XL v1.1 (USB)",
     ],
   },
   {
@@ -93,7 +93,7 @@ const OsDownloadRow = (content: PlatformContent) =>
       {content.computer}
     </td>
     <td>
-      <a className="transparent-link-button" href={content.imageUrl}>
+      <a className="transparent-button light" href={content.imageUrl}>
         {`${t("DOWNLOAD")} v${content.releaseTag}`}
       </a>
     </td>
@@ -149,7 +149,7 @@ const VERSIONS = () => ({
     Version["v1.0"],
   ],
   [Model.Genesis]: [
-    // Version["v1.7"],
+    Version["v1.7"],
     Version["v1.6"],
     Version["v1.5"],
     Version["v1.4"],
@@ -243,7 +243,7 @@ const DownloadLink = (content: Partial<ReleaseItem>) =>
   <div className={"download-link"}>
     <p className={"os-download-wizard-note"}>
       {`${t("Your FarmBot's internal computer is the")} ${content.computer}`}</p>
-    <a className="transparent-link-button" href={content.imageUrl}>
+    <a className="transparent-button light" href={content.imageUrl}>
       {`${t("DOWNLOAD")} v${content.releaseTag}`}
     </a>
   </div>;
@@ -256,7 +256,7 @@ interface SimpleButtonProps {
 
 const SimpleButton = (props: SimpleButtonProps) =>
   <div className={"download-wizard-button"}>
-    <button className={`transparent-button ${props.extraClass}`}
+    <button className={`transparent-button light ${props.extraClass}`}
       onClick={props.click}>
       {props.content}
     </button>

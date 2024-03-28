@@ -256,10 +256,10 @@ describe("designer reducer", () => {
   });
 
   it("sets opened saved garden", () => {
-    const payload = "savedGardenUuid";
-    const action: ReduxAction<string | undefined> = {
+    const payload = 1;
+    const action: ReduxAction<number | undefined> = {
       type: Actions.CHOOSE_SAVED_GARDEN,
-      payload
+      payload,
     };
     const newState = designer(oldState(), action);
     expect(newState.openedSavedGarden).toEqual(payload);
@@ -501,6 +501,16 @@ describe("designer reducer", () => {
     };
     const newState = designer(state, action);
     expect(newState.gridIds).toEqual([]);
+  });
+
+  it("sets grid start", () => {
+    const state = oldState();
+    state.gridStart = { x: 100, y: 100 };
+    const action: ReduxAction<Record<"x" | "y", number>> = {
+      type: Actions.SET_GRID_START, payload: { x: 200, y: 300 }
+    };
+    const newState = designer(state, action);
+    expect(newState.gridStart).toEqual({ x: 200, y: 300 });
   });
 
   it("toggle soil height labels", () => {

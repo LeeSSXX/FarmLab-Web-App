@@ -106,7 +106,7 @@ export class LogsPanel extends React.Component<LogsProps, Partial<LogsState>> {
           onChange={searchTerm => this.setState({ searchTerm })} />
         <div className={"logs-settings-menu-button"}>
           <Popover position={Position.TOP_RIGHT}
-            target={<i className="fa fa-gear" />}
+            target={<i className={"fa fa-gear fb-icon-button"} />}
             content={<LogsSettingsMenu
               markdown={this.state.markdown}
               toggleMarkdown={this.toggleMarkdown}
@@ -128,6 +128,7 @@ export class LogsPanel extends React.Component<LogsProps, Partial<LogsState>> {
         toggle={this.toggle}
         setFilterLevel={this.setFilterLevel}
         toggleCurrentFbosOnly={this.toggleCurrentFbosOnly}
+        device={this.props.device}
         timeSettings={this.props.timeSettings} />
     </div>;
   }

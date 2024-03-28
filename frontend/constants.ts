@@ -782,6 +782,10 @@ export namespace Content {
     trim(`If not using sensors, use this setting to remove the
     panel from the Farm Designer.`);
 
+  export const ENABLE_3D_ELECTRONICS_BOX_TOP =
+    trim(`Show a 3D model of FarmBot's electronics box instead of a 2D view
+    in the Peripherals tab of the Controls pop-up.`);
+
   export const BROWSER_SPEAK_LOGS =
     trim(`Have the browser also read aloud log messages on the
     "Speak" channel that are spoken by FarmBot.`);
@@ -1100,6 +1104,9 @@ export namespace Content {
     trim(`Importing this sequence will allow you to use it with your
     FarmBot and make changes. If the original author of the sequence
     publishes a new version, you will have the option to upgrade your copy.`);
+
+  export const INCLUDES_LUA_WARNING =
+    trim(`This sequence includes Lua code. Review carefully before executing.`);
 
   export const IMPORTED_SEQUENCE =
     trim(`This sequence was imported from a publicly shared sequence. If
@@ -1471,7 +1478,7 @@ export namespace TourContent {
     lot of plants at once? Go to the next step of the tour!`);
 
   export const GRID_AND_ROW_PLANTING =
-    trim(`To add a grid or row of plants, scroll to the bottom of the panel,
+    trim(`To add a grid or row of plants, press the + GRID button,
     enter values into the grid and row planting fields and click PREVIEW.
     The previewed plants will show in the map in grayscale. Make adjustments
     as necessary and when you are happy with the preview, click SAVE.
@@ -1868,7 +1875,7 @@ export namespace SetupWizardContent {
     trim(`Customize which Action or Sequence you want FarmBot to execute
     when you press Button 3, 4, or 5 on the electronics box. To start, we
     recommend setting Button 5 to the 'Find Home' sequence. You can change
-    this later from the controls panel.`);
+    this later from the controls pop-up.`);
 
   export const PROBLEM_GETTING_IMAGE =
     trim(`There is a 'camera not detected' or 'problem getting image' error
@@ -2111,7 +2118,7 @@ export enum DeviceSetting {
   cameraView = `Camera view`,
   uncroppedCameraView = `Uncropped Camera view`,
   confirmPlantDeletion = `Confirm plant deletion`,
-  defaultPlantDepth = `Default plant depth`,
+  defaultPlantDepth = `Default plant depth (mm)`,
 
   // Account
   accountSettings = `Account`,
@@ -2197,6 +2204,7 @@ export enum DeviceSetting {
   showSecondsInTime = `Show seconds in time`,
   hideWebcamWidget = `Hide Webcam widget`,
   hideSensorsPanel = `Hide Sensors panel`,
+  enable3dElectronicsBox = `Enable 3D electronics box`,
   readSpeakLogsInBrowser = `Read speak logs in browser`,
   landingPage = `Landing page`,
   browserFarmbotActivityBeep = `Browser FarmBot activity beep`,
@@ -2391,6 +2399,7 @@ export enum Actions {
   HIGHLIGHT_MAP_IMAGE = "HIGHLIGHT_MAP_IMAGE",
   SHOW_CAMERA_VIEW_POINTS = "SHOW_CAMERA_VIEW_POINTS",
   TOGGLE_GRID_ID = "TOGGLE_GRID_ID",
+  SET_GRID_START = "SET_GRID_START",
   TOGGLE_SOIL_HEIGHT_LABELS = "TOGGLE_SOIL_HEIGHT_LABELS",
   SET_PROFILE_OPEN = "SET_PROFILE_OPEN",
   SET_PROFILE_AXIS = "SET_PROFILE_AXIS",

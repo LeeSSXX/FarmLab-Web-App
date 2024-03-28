@@ -84,7 +84,7 @@ const getUpdateByPlantStage = (plant_stage: PlantStage): PlantOptions => {
       update.planted_at = undefined;
       break;
     case "planted":
-      update.planted_at = moment().toISOString();
+      update.planted_at = "" + moment().toISOString();
   }
   return update;
 };
@@ -164,7 +164,7 @@ export const PlantDateBulkUpdate = (props: PlantDateBulkUpdateProps) => {
           }))
           && plants.map(plant => {
             props.dispatch(edit(plant, {
-              planted_at: moment(e.currentTarget.value)
+              planted_at: "" + moment(e.currentTarget.value)
                 .utcOffset(props.timeSettings.utcOffset).toISOString()
             }));
             props.dispatch(save(plant.uuid));
@@ -315,7 +315,7 @@ export const PlantSlugBulkUpdate = (props: PlantSlugBulkUpdateProps) => {
       to={Path.cropSearch(slug)}>
       {startCase(slug)}
     </Link>
-    <i className={"fa fa-pencil"}
+    <i className={"fa fa-pencil fb-icon-button"}
       onClick={() => {
         props.dispatch({ type: Actions.SET_SLUG_BULK, payload: slug });
         push(Path.cropSearch());

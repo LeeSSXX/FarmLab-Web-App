@@ -390,7 +390,10 @@ CREATE TABLE public.devices (
     lat numeric,
     lng numeric,
     indoor boolean DEFAULT false,
-    rpi character varying(3)
+    rpi character varying(3),
+    max_log_age_in_days integer DEFAULT 0,
+    max_sequence_count integer DEFAULT 0,
+    max_sequence_length integer DEFAULT 0
 );
 
 
@@ -2032,7 +2035,8 @@ CREATE TABLE public.web_app_configs (
     go_button_axes character varying(3) DEFAULT 'XY'::character varying NOT NULL,
     show_uncropped_camera_view_area boolean DEFAULT false,
     default_plant_depth integer DEFAULT 5,
-    show_missed_step_plot boolean DEFAULT false
+    show_missed_step_plot boolean DEFAULT false,
+    enable_3d_electronics_box_top boolean DEFAULT true
 );
 
 
@@ -3979,6 +3983,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20230712201622'),
 ('20230714010144'),
 ('20230714173031'),
-('20230808192946');
+('20230808192946'),
+('20240118204046'),
+('20240202171922'),
+('20240207234421');
 
 

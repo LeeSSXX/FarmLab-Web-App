@@ -74,14 +74,14 @@ const AlertCardTemplate = (props: AlertCardTemplateProps) => {
   return <div className={
     `problem-alert ${props.className} priority-${props.alert.priority}`}>
     <div className="problem-alert-title">
-      <i className={`fa fa-${props.iconName || "exclamation-triangle"}`} />
+      <i className={`fa ${props.iconName || "fa-exclamation-triangle"}`} />
       <h3>{t(props.title)}</h3>
       {timeOk(alert.created_at) &&
         <p>
           {formatTime(moment.unix(alert.created_at), timeSettings, "MMM D")}
         </p>}
     </div>
-    {alert.id && !props.noDismiss && <i className="fa fa-times"
+    {alert.id && !props.noDismiss && <i className={"fa fa-times fb-icon-button"}
       onClick={dismissAlert({ id: alert.id, findApiAlertById, dispatch })} />}
     <div className="problem-alert-content">
       <Markdown html={true}>{t(props.message)}</Markdown>
@@ -91,9 +91,9 @@ const AlertCardTemplate = (props: AlertCardTemplateProps) => {
 };
 
 const ICON_LOOKUP: { [x: string]: string } = {
-  "info": "info-circle",
-  "success": "check-square",
-  "warn": "exclamation-triangle",
+  "info": "fa-info-circle",
+  "success": "fa-check-square",
+  "warn": "fa-exclamation-triangle",
 };
 
 class BulletinAlert
@@ -126,7 +126,7 @@ class BulletinAlert
       alert={this.props.alert}
       className={"bulletin-alert"}
       title={title || startCase(this.props.alert.slug)}
-      iconName={ICON_LOOKUP[type] || "info-circle"}
+      iconName={ICON_LOOKUP[type] || "fa-info-circle"}
       message={t(content)}
       timeSettings={this.props.timeSettings}
       dispatch={this.props.dispatch}
@@ -165,24 +165,9 @@ const FirmwareChoiceTable = () =>
     </thead>
     <tbody>
       <tr>
-        <td>{"Genesis v1.2"}</td>
-        <td>{"RAMPS"}</td>
-        <td><code>{FIRMWARE_CHOICES_DDI["arduino"].label}</code></td>
-      </tr>
-      <tr>
-        <td>{"Genesis v1.3"}</td>
+        <td>{"Genesis v1.7"}</td>
         <td>{"Farmduino"}</td>
-        <td><code>{FIRMWARE_CHOICES_DDI["farmduino"].label}</code></td>
-      </tr>
-      <tr>
-        <td>{"Genesis v1.4"}</td>
-        <td>{"Farmduino"}</td>
-        <td><code>{FIRMWARE_CHOICES_DDI["farmduino_k14"].label}</code></td>
-      </tr>
-      <tr>
-        <td>{"Genesis v1.5"}</td>
-        <td>{"Farmduino"}</td>
-        <td><code>{FIRMWARE_CHOICES_DDI["farmduino_k15"].label}</code></td>
+        <td><code>{FIRMWARE_CHOICES_DDI["farmduino_k17"].label}</code></td>
       </tr>
       <tr>
         <td>{"Genesis v1.6"}</td>
@@ -190,24 +175,39 @@ const FirmwareChoiceTable = () =>
         <td><code>{FIRMWARE_CHOICES_DDI["farmduino_k16"].label}</code></td>
       </tr>
       <tr>
-        <td>{"Genesis v1.7"}</td>
+        <td>{"Genesis v1.5"}</td>
         <td>{"Farmduino"}</td>
-        <td><code>{FIRMWARE_CHOICES_DDI["farmduino_k17"].label}</code></td>
+        <td><code>{FIRMWARE_CHOICES_DDI["farmduino_k15"].label}</code></td>
       </tr>
       <tr>
-        <td>{"Express v1.0"}</td>
+        <td>{"Genesis v1.4"}</td>
         <td>{"Farmduino"}</td>
-        <td><code>{FIRMWARE_CHOICES_DDI["express_k10"].label}</code></td>
+        <td><code>{FIRMWARE_CHOICES_DDI["farmduino_k14"].label}</code></td>
       </tr>
+      <tr>
+        <td>{"Genesis v1.3"}</td>
+        <td>{"Farmduino"}</td>
+        <td><code>{FIRMWARE_CHOICES_DDI["farmduino"].label}</code></td>
+      </tr>
+      <tr>
+        <td>{"Genesis v1.2"}</td>
+        <td>{"RAMPS"}</td>
+        <td><code>{FIRMWARE_CHOICES_DDI["arduino"].label}</code></td>
+      </tr>
+      {/* <tr>
+        <td>{"Express v1.2"}</td>
+        <td>{"Farmduino"}</td>
+        <td><code>{FIRMWARE_CHOICES_DDI["express_k12"].label}</code></td>
+      </tr> */}
       <tr>
         <td>{"Express v1.1"}</td>
         <td>{"Farmduino"}</td>
         <td><code>{FIRMWARE_CHOICES_DDI["express_k11"].label}</code></td>
       </tr>
       <tr>
-        <td>{"Express v1.2"}</td>
+        <td>{"Express v1.0"}</td>
         <td>{"Farmduino"}</td>
-        <td><code>{FIRMWARE_CHOICES_DDI["express_k12"].label}</code></td>
+        <td><code>{FIRMWARE_CHOICES_DDI["express_k10"].label}</code></td>
       </tr>
     </tbody>
   </table>;
@@ -252,30 +252,26 @@ const FirmwareMissing = (props: FirmwareMissingProps) =>
   </AlertCardTemplate>;
 
 export const SEED_DATA_OPTIONS = (displayAll = false): DropDownItem[] => [
-  { label: "Genesis v1.2", value: "genesis_1.2" },
-  { label: "Genesis v1.3", value: "genesis_1.3" },
-  { label: "Genesis v1.4", value: "genesis_1.4" },
-  { label: "Genesis v1.5", value: "genesis_1.5" },
+  { label: "Genesis v1.7", value: "genesis_1.7" },
   { label: "Genesis v1.6", value: "genesis_1.6" },
-  ...((shouldDisplayFeature(Feature.farmduino_k17) || displayAll)
-    ? [{ label: "Genesis v1.7", value: "genesis_1.7" }]
-    : []),
-  { label: "Genesis v1.4 XL", value: "genesis_xl_1.4" },
-  { label: "Genesis v1.5 XL", value: "genesis_xl_1.5" },
+  { label: "Genesis v1.5", value: "genesis_1.5" },
+  { label: "Genesis v1.4", value: "genesis_1.4" },
+  { label: "Genesis v1.3", value: "genesis_1.3" },
+  { label: "Genesis v1.2", value: "genesis_1.2" },
+  { label: "Genesis v1.7 XL", value: "genesis_xl_1.7" },
   { label: "Genesis v1.6 XL", value: "genesis_xl_1.6" },
-  ...((shouldDisplayFeature(Feature.farmduino_k17) || displayAll)
-    ? [{ label: "Genesis v1.7 XL", value: "genesis_xl_1.7" }]
-    : []),
-  { label: "Express v1.0", value: "express_1.0" },
-  { label: "Express v1.1", value: "express_1.1" },
+  { label: "Genesis v1.5 XL", value: "genesis_xl_1.5" },
+  { label: "Genesis v1.4 XL", value: "genesis_xl_1.4" },
   ...((shouldDisplayFeature(Feature.express_k12) || displayAll)
     ? [{ label: "Express v1.2", value: "express_1.2" }]
     : []),
-  { label: "Express v1.0 XL", value: "express_xl_1.0" },
-  { label: "Express v1.1 XL", value: "express_xl_1.1" },
+  { label: "Express v1.1", value: "express_1.1" },
+  { label: "Express v1.0", value: "express_1.0" },
   ...((shouldDisplayFeature(Feature.express_k12) || displayAll)
     ? [{ label: "Express v1.2 XL", value: "express_xl_1.2" }]
     : []),
+  { label: "Express v1.1 XL", value: "express_xl_1.1" },
+  { label: "Express v1.0 XL", value: "express_xl_1.0" },
   { label: "Custom Bot", value: "none" },
 ];
 
@@ -304,7 +300,7 @@ class SeedDataMissing
       dispatch={this.props.dispatch}
       noDismiss={true}
       findApiAlertById={this.props.findApiAlertById}
-      iconName={"check-square"}>
+      iconName={"fa-check-square"}>
       <Row>
         <Col xs={4}>
           <label>{t("Choose your FarmBot")}</label>
@@ -351,7 +347,7 @@ const TourNotTaken = (props: TourNotTakenProps) =>
     timeSettings={props.timeSettings}
     dispatch={props.dispatch}
     findApiAlertById={props.findApiAlertById}
-    iconName={"info-circle"}>
+    iconName={"fa-info-circle"}>
     <a className="link-button fb-button green"
       onClick={() => push(Path.tours())}
       title={t("View available tours")}>
@@ -368,7 +364,7 @@ const UserNotWelcomed = (props: CommonAlertCardProps) =>
     timeSettings={props.timeSettings}
     dispatch={props.dispatch}
     findApiAlertById={props.findApiAlertById}
-    iconName={"info-circle"}>
+    iconName={"fa-info-circle"}>
     <p>
       {t("You're currently viewing the")} <b>{t("Message Center")}</b>.
       {" "}{t(Content.MESSAGE_CENTER_WELCOME)}
@@ -387,7 +383,7 @@ const DocumentationUnread = (props: CommonAlertCardProps) =>
     timeSettings={props.timeSettings}
     dispatch={props.dispatch}
     findApiAlertById={props.findApiAlertById}
-    iconName={"info-circle"}>
+    iconName={"fa-info-circle"}>
     <p className={"documentation-card"}>
       {t("Head over to")}
       &nbsp;<a href={docLink()} target="_blank" rel={"noreferrer"}
@@ -414,7 +410,7 @@ const DemoAccount = (props: CommonAlertCardProps) =>
     timeSettings={props.timeSettings}
     dispatch={props.dispatch}
     findApiAlertById={props.findApiAlertById}
-    iconName={"info-circle"}>
+    iconName={"fa-info-circle"}>
     <p>
       <i>{t("Please note:")}</i>&nbsp;
       {t(Content.DEMO_NOTE)}
@@ -454,7 +450,7 @@ const SetupIncomplete = (props: SetupIncompleteProps) => {
     dispatch={props.dispatch}
     noDismiss={true}
     findApiAlertById={props.findApiAlertById}
-    iconName={"info-circle"}>
+    iconName={"fa-info-circle"}>
     <a className="link-button fb-button green"
       onClick={() => push(Path.setup())}
       title={buttonText}>

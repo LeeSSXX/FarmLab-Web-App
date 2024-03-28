@@ -2,7 +2,7 @@ import { Color, SpecialStatus, TaggedSequence } from "farmbot";
 import { store } from "../redux/store";
 import { initSave, destroy, edit, save, init } from "../api/crud";
 import { Folder } from "farmbot/dist/resources/api_resources";
-import { DeepPartial } from "redux";
+import { DeepPartial } from "../redux/interfaces";
 import { findFolderById } from "../resources/selectors_by_id";
 import { Actions } from "../constants";
 import { t } from "../i18next_wrapper";
@@ -13,6 +13,8 @@ import { stepGet, STEP_DATATRANSFER_IDENTIFER } from "../draggable/actions";
 import { joinKindAndId } from "../resources/reducer_support";
 import { maybeGetSequence } from "../resources/selectors";
 import { Path } from "../internal_urls";
+import { UnknownAction } from "redux";
+import { sequenceLimitExceeded } from "../sequences/actions";
 
 export const setFolderColor = (id: number, color: Color) => {
   const d = store.dispatch as Function;
@@ -38,7 +40,11 @@ const DEFAULTS = (): Folder => ({
 });
 
 export const addNewSequenceToFolder = (config: DeepPartial<Folder> = {}) => {
-  const uuidMap = store.getState().resources.index.byKind["Sequence"];
+  const ri = store.getState().resources.index;
+  if (sequenceLimitExceeded(ri)) {
+    return;
+  }
+  const uuidMap = ri.byKind["Sequence"];
   const seqCount = Object.keys(uuidMap).length;
   const newSequence = {
     name: t("New Sequence {{ num }}", { num: seqCount }),
@@ -51,7 +57,7 @@ export const addNewSequenceToFolder = (config: DeepPartial<Folder> = {}) => {
     kind: "sequence",
     body: [],
   };
-  store.dispatch(init("Sequence", newSequence));
+  store.dispatch(init("Sequence", newSequence) as unknown as UnknownAction);
   push(Path.sequences(urlFriendly(newSequence.name)));
   setActiveSequenceByName();
 };

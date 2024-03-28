@@ -591,7 +591,6 @@ a {
   position: relative;
   .setting-status-indicator {
     position: absolute;
-    top: 0.35rem;
     z-index: 1;
   }
   .fa-exclamation-triangle {
@@ -616,6 +615,18 @@ a {
     .bp5-popover-arrow-fill {
       fill: $dark_gray;
     }
+  }
+}
+
+.mcu-input-box {
+  .setting-status-indicator {
+    top: 0.5rem;
+  }
+}
+
+.fb-toggle-button {
+  .setting-status-indicator {
+    top: 0.25rem;
   }
 }
 
@@ -748,7 +759,7 @@ a {
   .sensor-selection,
   .sensor-history-time-selection,
   .sensor-history-location-selection {
-    margin-bottom: 1rem;
+    margin-bottom: 1rem !important;
   }
   .row {
     margin-bottom: 0 !important;
@@ -764,7 +775,9 @@ a {
 .add-sensor-reading-menu {
   width: 300px;
   .green {
-    margin-bottom: 1rem;
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
   }
   .reading-location,
   .add-reading-value-form {
@@ -843,11 +856,6 @@ fieldset {
 
 .webcams-tab {
   margin-top: 2rem;
-}
-
-.peripherals-tab {
-  overflow-y: scroll;
-  overflow-x: hidden;
 }
 
 .webcam-stream-unavailable {
@@ -965,6 +973,9 @@ hr {
       }
       box-shadow: 0 0 10px $translucent5, 0 0 5px inset rgba(255, 255, 255, 0.2) !important;
     }
+  }
+  &.hard {
+    border-radius: 5px;
   }
 }
 
@@ -1097,6 +1108,7 @@ ul {
   }
 }
 
+.sequence-description-wrapper,
 .button-group,
 .panel-header-icon-group {
   .fa-spinner {
@@ -1754,8 +1766,8 @@ ul {
       .fa-trash {
         display: inline;
         color: $darkest_red;
-        margin-left: 7px;
-        padding: 0.25rem;
+        margin-left: 6px;
+        padding: 0.5rem;
         line-height: 2rem;
       }
       .log-verbosity-saucer {
@@ -1770,7 +1782,7 @@ ul {
     width: 2rem;
     height: 2rem;
     text-align: center;
-    line-height: 1.7rem;
+    line-height: 1.3rem;
     margin-left: 5px;
   }
   .markdown {
@@ -1793,6 +1805,12 @@ ul {
       font-size: 1.4rem;
       font-weight: bold;
     }
+  }
+  .notice {
+    font-style: italic;
+    text-align: center;
+    font-size: 1.4rem;
+    padding: 1rem;
   }
 }
 
@@ -1853,7 +1871,7 @@ ul {
 .logs-tab {
   .thin-search-wrapper {
     display: inline-block;
-    width: 95%;
+    width: 94%;
     background: $white;
   }
   .logs-settings-menu-button {
@@ -1997,6 +2015,73 @@ ul {
   }
 }
 
+.electronics-box-3d-model {
+  margin-bottom: 1rem;
+  .led-label,
+  .btn-label {
+    display: block;
+    margin: auto;
+    width: max-content;
+    color: $off_white;
+    font-size: 1rem;
+    background: $dark_gray;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.5rem;
+    white-space: normal;
+    max-height: 3.4rem;
+    overflow-y: hidden;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    user-select: none;
+    &.hovered {
+      background: $black;
+    }
+    &.unbound {
+      background: $placeholder_gray;
+    }
+  }
+  .led-label {
+    max-width: 7rem;
+  }
+  .btn-label {
+    max-width: 5.8rem;
+  }
+  .filter-search {
+    max-width: 5.5rem;
+    .fa-caret-down {
+      bottom: -0.5rem;
+      right: 0.25rem;
+      color: $off_white;
+    }
+    button {
+      padding: 0.25rem;
+      background: $dark_gray !important;
+      border-radius: 0.5rem;
+      height: max-content !important;
+      min-height: 0;
+      &:hover {
+        background: $dark_gray !important;
+      }
+    }
+    span {
+      color: $off_white;
+      white-space: normal !important;
+      text-overflow: revert !important;
+      font-weight: 700;
+      font-size: 1rem;
+      text-align: center;
+      margin-right: 0.5rem;
+    }
+  }
+  div {
+    z-index: 0 !important;
+  }
+  canvas {
+    height: 23rem;
+  }
+}
+
 .webcam-widget {
   .no-flipper-image-container {
     background: none !important;
@@ -2016,7 +2101,6 @@ ul {
 }
 
 .peripheral-list {
-  margin-top: 1rem;
   label {
     margin-top: 0 !important;
   }
@@ -2029,7 +2113,12 @@ ul {
   }
 }
 
-.box-top-wrapper {
+.peripheral-form,
+.peripheral-list {
+  padding-top: 1rem;
+}
+
+.box-top-2d-wrapper {
   margin-top: 2rem;
   .box-top-leds,
   .box-top-buttons {
@@ -2360,9 +2449,6 @@ ul {
 }
 
 .status-icon {
-  padding: 0.5rem;
-  float: right !important;
-  font-size: 1.75rem;
   &.ok {
     color: $green;
   }
@@ -2618,16 +2704,11 @@ textarea:focus {
   }
 }
 
-.transparent-link-button {
-  font-size: 1rem;
-  border: 1px solid;
-  padding: 0.4rem 1.2rem;
-  font-weight: bold;
-  letter-spacing: 1px;
-  border-radius: 4px;
-  color: $off_white;
-  &:hover {
-    color: $white;
+.os-download-page {
+  table {
+    a {
+      text-transform: none;
+    }
   }
 }
 
@@ -2662,7 +2743,7 @@ textarea:focus {
       color: $off_white;
     }
     &:active {
-      color: $dark_gray !important;
+      color: $white !important;
     }
   }
   table {
@@ -2809,6 +2890,9 @@ textarea:focus {
     }
     .download-link {
       display: inline-block;
+      a {
+        text-transform: none;
+      }
     }
     .buttons-with-image {
       display: flex;

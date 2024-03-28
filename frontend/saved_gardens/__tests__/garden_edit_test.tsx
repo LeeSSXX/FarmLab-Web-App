@@ -86,7 +86,7 @@ describe("<EditGarden />", () => {
     const p = fakeProps();
     p.savedGarden = fakeSavedGarden();
     const wrapper = mount(<EditGarden {...p} />);
-    clickButton(wrapper, 1, "delete");
+    wrapper.find(".fa-trash").first().simulate("click");
     expect(destroySavedGarden).toHaveBeenCalledWith(p.savedGarden.uuid);
   });
 
@@ -136,7 +136,7 @@ describe("mapStateToProps()", () => {
     mockPath = Path.mock(Path.savedGardens(1));
     const state = fakeState();
     state.resources = buildResourceIndex([sg, fakePlantTemplate()]);
-    state.resources.consumers.farm_designer.openedSavedGarden = sg.uuid;
+    state.resources.consumers.farm_designer.openedSavedGarden = sg.body.id;
     const props = mapStateToProps(state);
     expect(props.gardenIsOpen).toEqual(true);
     expect(props.savedGarden).toEqual(sg);
@@ -148,7 +148,7 @@ describe("mapStateToProps()", () => {
     mockPath = Path.mock(Path.savedGardens());
     const state = fakeState();
     state.resources = buildResourceIndex([sg, fakePlantTemplate()]);
-    state.resources.consumers.farm_designer.openedSavedGarden = sg.uuid;
+    state.resources.consumers.farm_designer.openedSavedGarden = sg.body.id;
     const props = mapStateToProps(state);
     expect(props.gardenIsOpen).toEqual(false);
     expect(props.savedGarden).toEqual(undefined);

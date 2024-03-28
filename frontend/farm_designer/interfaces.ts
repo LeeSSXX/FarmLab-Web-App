@@ -165,7 +165,7 @@ export interface DesignerState {
   chosenLocation: BotPosition;
   drawnPoint: DrawnPointPayl | undefined;
   drawnWeed: DrawnWeedPayl | undefined;
-  openedSavedGarden: string | undefined;
+  openedSavedGarden: number | undefined;
   tryGroupSortType: ExtendedPointGroupSortType | undefined;
   editGroupAreaInMap: boolean;
   visualizedSequence: UUID | undefined;
@@ -181,6 +181,7 @@ export interface DesignerState {
   hoveredMapImage: number | undefined;
   cameraViewGridId: string | undefined;
   gridIds: string[];
+  gridStart: Record<"x" | "y", number>;
   soilHeightLabels: boolean;
   profileOpen: boolean;
   profileAxis: "x" | "y";
@@ -311,7 +312,7 @@ export type PlantOptions = Partial<PlantPointer>;
 export interface EditPlantInfoProps {
   dispatch: Function;
   findPlant(stringyID: string | undefined): TaggedPlant | undefined;
-  openedSavedGarden: string | undefined;
+  openedSavedGarden: number | undefined;
   timeSettings: TimeSettings;
   getConfigValue: GetWebAppConfigValue;
   soilHeightPoints: TaggedGenericPointer[];
