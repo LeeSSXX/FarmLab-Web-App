@@ -13,9 +13,9 @@ EXCLUDE = [
     version: "1.4.1",
   },
   {
-    packages: ["mqtt"],
-    reason: "import error",
-    version: "5.3.0",
+    packages: ["eslint"],
+    reason: "breaking changes in",
+    version: "9",
   },
 ]
 

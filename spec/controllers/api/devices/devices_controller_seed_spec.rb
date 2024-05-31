@@ -45,8 +45,8 @@ describe Api::DevicesController do
       device.pin_bindings.find_by(pin_num: 22)
     end
 
-    def plants?(device)
-      device.plants.count == 11
+    def plant_count?(device)
+      device.plants.count
     end
 
     def sensors_soil_sensor?(device)
@@ -68,9 +68,7 @@ describe Api::DevicesController do
     def settings_change_firmware_config_defaults?(device)
       c = device.firmware_config
 
-      return c.encoder_enabled_x != 0 &&
-             c.encoder_enabled_y != 0 &&
-             c.encoder_enabled_z != 0
+      return c.movement_motor_current_x == 1646
     end
 
     def settings_soil_height?(device)
@@ -322,7 +320,7 @@ describe Api::DevicesController do
       expect(peripherals_rotary_tool_reverse?(device)).to_not be
       expect(pin_bindings_button_1?(device)).to_not be
       expect(pin_bindings_button_2?(device)).to_not be
-      expect(plants?(device)).to be false
+      expect(plant_count?(device)).to eq(0)
       expect(sensors_soil_sensor?(device)).to be_kind_of(Sensor)
       expect(sensors_tool_verification?(device)).to be_kind_of(Sensor)
       expect(settings_device_name?(device)).to eq(Names::GENESIS)
@@ -395,7 +393,7 @@ describe Api::DevicesController do
       expect(peripherals_rotary_tool_reverse?(device)).to_not be
       expect(pin_bindings_button_1?(device)).to_not be
       expect(pin_bindings_button_2?(device)).to_not be
-      expect(plants?(device)).to be false
+      expect(plant_count?(device)).to eq(0)
       expect(sensors_soil_sensor?(device).pin).to eq(59)
       expect(sensors_tool_verification?(device).pin).to eq(63)
       expect(settings_device_name?(device)).to eq(Names::GENESIS)
@@ -468,7 +466,7 @@ describe Api::DevicesController do
       expect(peripherals_rotary_tool_reverse?(device)).to_not be
       expect(pin_bindings_button_1?(device).special_action).to eq("emergency_lock")
       expect(pin_bindings_button_2?(device).special_action).to eq("emergency_unlock")
-      expect(plants?(device)).to be false
+      expect(plant_count?(device)).to eq(0)
       expect(sensors_soil_sensor?(device).pin).to eq(59)
       expect(sensors_tool_verification?(device).pin).to eq(63)
       expect(settings_device_name?(device)).to eq(Names::GENESIS)
@@ -541,7 +539,7 @@ describe Api::DevicesController do
       expect(peripherals_rotary_tool_reverse?(device)).to_not be
       expect(pin_bindings_button_1?(device).special_action).to eq("emergency_lock")
       expect(pin_bindings_button_2?(device).special_action).to eq("emergency_unlock")
-      expect(plants?(device)).to be false
+      expect(plant_count?(device)).to eq(0)
       expect(sensors_soil_sensor?(device).pin).to eq(59)
       expect(sensors_tool_verification?(device).pin).to eq(63)
       expect(settings_device_name?(device)).to eq(Names::GENESIS)
@@ -616,7 +614,7 @@ describe Api::DevicesController do
       expect(peripherals_rotary_tool_reverse?(device).pin).to eq(3)
       expect(pin_bindings_button_1?(device).special_action).to eq("emergency_lock")
       expect(pin_bindings_button_2?(device).special_action).to eq("emergency_unlock")
-      expect(plants?(device)).to be false
+      expect(plant_count?(device)).to eq(0)
       expect(sensors_soil_sensor?(device).pin).to eq(59)
       expect(sensors_tool_verification?(device).pin).to eq(63)
       expect(settings_device_name?(device)).to eq(Names::GENESIS)
@@ -692,7 +690,7 @@ describe Api::DevicesController do
       expect(peripherals_rotary_tool_reverse?(device).pin).to eq(3)
       expect(pin_bindings_button_1?(device).special_action).to eq("emergency_lock")
       expect(pin_bindings_button_2?(device).special_action).to eq("emergency_unlock")
-      expect(plants?(device)).to be false
+      expect(plant_count?(device)).to eq(0)
       expect(sensors_soil_sensor?(device).pin).to eq(59)
       expect(sensors_tool_verification?(device).pin).to eq(63)
       expect(settings_device_name?(device)).to eq(Names::GENESIS)
@@ -767,7 +765,7 @@ describe Api::DevicesController do
       expect(peripherals_rotary_tool_reverse?(device)).to_not be
       expect(pin_bindings_button_1?(device).special_action).to eq("emergency_lock")
       expect(pin_bindings_button_2?(device).special_action).to eq("emergency_unlock")
-      expect(plants?(device)).to be false
+      expect(plant_count?(device)).to eq(0)
       expect(sensors_soil_sensor?(device).pin).to eq(59)
       expect(sensors_tool_verification?(device).pin).to eq(63)
       expect(settings_device_name?(device)).to eq(Names::GENESIS_XL)
@@ -840,7 +838,7 @@ describe Api::DevicesController do
       expect(peripherals_rotary_tool_reverse?(device)).to_not be
       expect(pin_bindings_button_1?(device).special_action).to eq("emergency_lock")
       expect(pin_bindings_button_2?(device).special_action).to eq("emergency_unlock")
-      expect(plants?(device)).to be false
+      expect(plant_count?(device)).to eq(0)
       expect(sensors_soil_sensor?(device).pin).to eq(59)
       expect(sensors_tool_verification?(device).pin).to eq(63)
       expect(settings_device_name?(device)).to eq(Names::GENESIS_XL)
@@ -915,7 +913,7 @@ describe Api::DevicesController do
       expect(peripherals_rotary_tool_reverse?(device).pin).to eq(3)
       expect(pin_bindings_button_1?(device).special_action).to eq("emergency_lock")
       expect(pin_bindings_button_2?(device).special_action).to eq("emergency_unlock")
-      expect(plants?(device)).to be false
+      expect(plant_count?(device)).to eq(0)
       expect(sensors_soil_sensor?(device).pin).to eq(59)
       expect(sensors_tool_verification?(device).pin).to eq(63)
       expect(settings_device_name?(device)).to eq(Names::GENESIS_XL)
@@ -990,7 +988,7 @@ describe Api::DevicesController do
       expect(peripherals_rotary_tool_reverse?(device).pin).to eq(3)
       expect(pin_bindings_button_1?(device).special_action).to eq("emergency_lock")
       expect(pin_bindings_button_2?(device).special_action).to eq("emergency_unlock")
-      expect(plants?(device)).to be false
+      expect(plant_count?(device)).to eq(0)
       expect(sensors_soil_sensor?(device).pin).to eq(59)
       expect(sensors_tool_verification?(device).pin).to eq(63)
       expect(settings_device_name?(device)).to eq(Names::GENESIS_XL)
@@ -1066,7 +1064,7 @@ describe Api::DevicesController do
       expect(peripherals_rotary_tool_reverse?(device)).to_not be
       expect(pin_bindings_button_1?(device).special_action).to eq("emergency_lock")
       expect(pin_bindings_button_2?(device).special_action).to eq("emergency_unlock")
-      expect(plants?(device)).to be false
+      expect(plant_count?(device)).to eq(0)
       expect(sensors_soil_sensor?(device)).to_not be
       expect(sensors_tool_verification?(device)).to_not be
       expect(settings_device_name?(device)).to eq(Names::EXPRESS)
@@ -1135,7 +1133,7 @@ describe Api::DevicesController do
       expect(peripherals_rotary_tool_reverse?(device)).to_not be
       expect(pin_bindings_button_1?(device).special_action).to eq("emergency_lock")
       expect(pin_bindings_button_2?(device).special_action).to eq("emergency_unlock")
-      expect(plants?(device)).to be false
+      expect(plant_count?(device)).to eq(0)
       expect(sensors_soil_sensor?(device)).to_not be
       expect(sensors_tool_verification?(device)).to_not be
       expect(settings_device_name?(device)).to eq(Names::EXPRESS)
@@ -1204,7 +1202,7 @@ describe Api::DevicesController do
       expect(peripherals_rotary_tool_reverse?(device)).to_not be
       expect(pin_bindings_button_1?(device).special_action).to eq("emergency_lock")
       expect(pin_bindings_button_2?(device).special_action).to eq("emergency_unlock")
-      expect(plants?(device)).to be false
+      expect(plant_count?(device)).to eq(0)
       expect(sensors_soil_sensor?(device)).to_not be
       expect(sensors_tool_verification?(device)).to_not be
       expect(settings_device_name?(device)).to eq(Names::EXPRESS)
@@ -1273,7 +1271,7 @@ describe Api::DevicesController do
       expect(peripherals_rotary_tool_reverse?(device)).to_not be
       expect(pin_bindings_button_1?(device).special_action).to eq("emergency_lock")
       expect(pin_bindings_button_2?(device).special_action).to eq("emergency_unlock")
-      expect(plants?(device)).to be false
+      expect(plant_count?(device)).to eq(0)
       expect(sensors_soil_sensor?(device)).to_not be
       expect(sensors_tool_verification?(device)).to_not be
       expect(settings_device_name?(device)).to eq(Names::EXPRESS_XL)
@@ -1342,7 +1340,7 @@ describe Api::DevicesController do
       expect(peripherals_rotary_tool_reverse?(device)).to_not be
       expect(pin_bindings_button_1?(device).special_action).to eq("emergency_lock")
       expect(pin_bindings_button_2?(device).special_action).to eq("emergency_unlock")
-      expect(plants?(device)).to be false
+      expect(plant_count?(device)).to eq(0)
       expect(sensors_soil_sensor?(device)).to_not be
       expect(sensors_tool_verification?(device)).to_not be
       expect(settings_device_name?(device)).to eq(Names::EXPRESS_XL)
@@ -1411,7 +1409,7 @@ describe Api::DevicesController do
       expect(peripherals_rotary_tool_reverse?(device)).to_not be
       expect(pin_bindings_button_1?(device).special_action).to eq("emergency_lock")
       expect(pin_bindings_button_2?(device).special_action).to eq("emergency_unlock")
-      expect(plants?(device)).to be false
+      expect(plant_count?(device)).to eq(0)
       expect(sensors_soil_sensor?(device)).to_not be
       expect(sensors_tool_verification?(device)).to_not be
       expect(settings_device_name?(device)).to eq(Names::EXPRESS_XL)
@@ -1471,7 +1469,16 @@ describe Api::DevicesController do
     it "seeds accounts with demo account data" do
       start_tests "genesis_1.7", true, true
 
-      expect(plants?(device)).to be true
+      expect(plant_count?(device)).to eq(84)
+      expect(point_groups_spinach?(device)).to be_kind_of(PointGroup)
+      expect(point_groups_broccoli?(device)).to be_kind_of(PointGroup)
+      expect(point_groups_beet?(device)).to be_kind_of(PointGroup)
+    end
+
+    it "seeds accounts with demo account data: XL" do
+      start_tests "genesis_xl_1.7", true, true
+
+      expect(plant_count?(device)).to eq(253)
       expect(point_groups_spinach?(device)).to be_kind_of(PointGroup)
       expect(point_groups_broccoli?(device)).to be_kind_of(PointGroup)
       expect(point_groups_beet?(device)).to be_kind_of(PointGroup)
