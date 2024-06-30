@@ -123,7 +123,7 @@ namespace :api do
     end
   end
 
-  RELEASES_URL = "https://api.github.com/repos/farmbot/farmbot_os/releases"
+  RELEASES_URL = "https://api.github.com/repos/LeeSSXX/farmlab_os/releases"
   VERSION = "tag_name"
   TIMESTAMP = "created_at"
   PRERELEASE = "prerelease"

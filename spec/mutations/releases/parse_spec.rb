@@ -7,39 +7,39 @@ describe Releases::Parse do
     tag_name: "v11.0.1",
     assets: [
       {
-        browser_download_url: "https://github.com/FarmBot/farmbot_os/releases/download/v11.0.1/farmbot-rpi-11.0.1.fw",
+        browser_download_url: "https://github.com/LeeSSXX/farmlab_os/releases/download/v11.0.1/farmlab-rpi-11.0.1.fw",
         content_type: "application/octet-stream",
-        name: "farmbot-rpi-11.0.1.fw",
+        name: "farmlab-rpi-11.0.1.fw",
         state: "uploaded",
       },
       {
-        browser_download_url: "https://github.com/FarmBot/farmbot_os/releases/download/v11.0.1/farmbot-rpi-11.0.1.img",
+        browser_download_url: "https://github.com/LeeSSXX/farmlab_os/releases/download/v11.0.1/farmlab-rpi-11.0.1.img",
         content_type: "application/octet-stream",
-        name: "farmbot-rpi-11.0.1.img",
+        name: "farmlab-rpi-11.0.1.img",
         state: "uploaded",
       },
       {
-        browser_download_url: "https://github.com/FarmBot/farmbot_os/releases/download/v11.0.1/farmbot-rpi-11.0.1.sha256",
+        browser_download_url: "https://github.com/LeeSSXX/farmlab_os/releases/download/v11.0.1/farmlab-rpi-11.0.1.sha256",
         content_type: "application/octet-stream",
-        name: "farmbot-rpi-11.0.1.sha256",
+        name: "farmlab-rpi-11.0.1.sha256",
         state: "uploaded",
       },
       {
-        browser_download_url: "https://github.com/FarmBot/farmbot_os/releases/download/v11.0.1/farmbot-rpi3-11.0.1.fw",
+        browser_download_url: "https://github.com/LeeSSXX/farmlab_os/releases/download/v11.0.1/farmlab-rpi3-11.0.1.fw",
         content_type: "application/octet-stream",
-        name: "farmbot-rpi3-11.0.1.fw",
+        name: "farmlab-rpi3-11.0.1.fw",
         state: "uploaded",
       },
       {
-        browser_download_url: "https://github.com/FarmBot/farmbot_os/releases/download/v11.0.1/farmbot-rpi3-11.0.1.img",
+        browser_download_url: "https://github.com/LeeSSXX/farmlab_os/releases/download/v11.0.1/farmlab-rpi3-11.0.1.img",
         content_type: "application/octet-stream",
-        name: "farmbot-rpi3-11.0.1.img",
+        name: "farmlab-rpi3-11.0.1.img",
         state: "uploaded",
       },
       {
-        browser_download_url: "https://github.com/FarmBot/farmbot_os/releases/download/v11.0.1/farmbot-rpi3-11.0.1.sha256",
+        browser_download_url: "https://github.com/LeeSSXX/farmlab_os/releases/download/v11.0.1/farmlab-rpi3-11.0.1.sha256",
         content_type: "application/octet-stream",
-        name: "farmbot-rpi3-11.0.1.sha256",
+        name: "farmlab-rpi3-11.0.1.sha256",
         state: "uploaded",
       },
     ],
@@ -52,52 +52,52 @@ describe Releases::Parse do
       tag_name: "v12.1.0",
       assets: [
         {
-          name: "farmbot-rpi-12.1.0.fw",
+          name: "farmlab-rpi-12.1.0.fw",
           content_type: "application/octet-stream",
           state: "uploaded",
-          browser_download_url: "https://github.com/FarmBot/farmbot_os/releases/download/v12.1.0/farmbot-rpi-12.1.0.fw",
+          browser_download_url: "https://github.com/LeeSSXX/farmlab_os/releases/download/v12.1.0/farmlab-rpi-12.1.0.fw",
         },
         {
-          name: "farmbot-rpi-12.1.0.img",
+          name: "farmlab-rpi-12.1.0.img",
           content_type: "application/octet-stream",
           state: "uploaded",
-          browser_download_url: "https://github.com/FarmBot/farmbot_os/releases/download/v12.1.0/farmbot-rpi-12.1.0.img",
+          browser_download_url: "https://github.com/LeeSSXX/farmlab_os/releases/download/v12.1.0/farmlab-rpi-12.1.0.img",
         },
         {
-          name: "farmbot-rpi-12.1.0.sha256",
+          name: "farmlab-rpi-12.1.0.sha256",
           content_type: "application/octet-stream",
           state: "uploaded",
-          browser_download_url: "https://github.com/FarmBot/farmbot_os/releases/download/v12.1.0/farmbot-rpi-12.1.0.sha256",
+          browser_download_url: "https://github.com/LeeSSXX/farmlab_os/releases/download/v12.1.0/farmlab-rpi-12.1.0.sha256",
         },
         {
-          name: "farmbot-rpi3-12.1.0.fw",
+          name: "farmlab-rpi3-12.1.0.fw",
           content_type: "application/octet-stream",
           state: "uploaded",
-          browser_download_url: "https://github.com/FarmBot/farmbot_os/releases/download/v12.1.0/farmbot-rpi3-12.1.0.fw",
+          browser_download_url: "https://github.com/LeeSSXX/farmlab_os/releases/download/v12.1.0/farmlab-rpi3-12.1.0.fw",
         },
         {
-          name: "farmbot-rpi3-12.1.0.img",
+          name: "farmlab-rpi3-12.1.0.img",
           content_type: "application/octet-stream",
           state: "uploaded",
-          browser_download_url: "https://github.com/FarmBot/farmbot_os/releases/download/v12.1.0/farmbot-rpi3-12.1.0.img",
+          browser_download_url: "https://github.com/LeeSSXX/farmlab_os/releases/download/v12.1.0/farmlab-rpi3-12.1.0.img",
         },
         {
-          name: "farmbot-rpi3-12.1.0.sha256",
+          name: "farmlab-rpi3-12.1.0.sha256",
           content_type: "application/octet-stream",
           state: "uploaded",
-          browser_download_url: "https://github.com/FarmBot/farmbot_os/releases/download/v12.1.0/farmbot-rpi3-12.1.0.sha256",
+          browser_download_url: "https://github.com/LeeSSXX/farmlab_os/releases/download/v12.1.0/farmlab-rpi3-12.1.0.sha256",
         },
       ],
     }
     output = Releases::Parse.run!(input)
     expect(output.count).to be 2
     expect(output).to include({
-                        image_url: "https://github.com/FarmBot/farmbot_os/releases/download/v12.1.0/farmbot-rpi-12.1.0.fw",
+                        image_url: "https://github.com/LeeSSXX/farmlab_os/releases/download/v12.1.0/farmlab-rpi-12.1.0.fw",
                         version: "12.1.0",
                         platform: "rpi",
                       })
     expect(output).to include({
-                        image_url: "https://github.com/FarmBot/farmbot_os/releases/download/v12.1.0/farmbot-rpi3-12.1.0.fw",
+                        image_url: "https://github.com/LeeSSXX/farmlab_os/releases/download/v12.1.0/farmlab-rpi3-12.1.0.fw",
                         version: "12.1.0",
                         platform: "rpi3",
                       })
@@ -120,7 +120,7 @@ describe Releases::Parse do
           {
             browser_download_url: "whatever.fw",
             content_type: "application/octet-stream",
-            name: "farmbot-bbb3-11.0.1.fw", # <== Intentionally wrong format.
+            name: "farmlab-bbb3-11.0.1.fw", # <== Intentionally wrong format.
             state: "uploaded",
           },
         ],

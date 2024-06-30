@@ -1,7 +1,7 @@
 import { isNumber } from "lodash";
 
 enum Org {
-  FarmBot = "FarmLab",
+  FarmBot = "LeeSSXX",
   FarmBotLabs = "Farm-Labs",
 }
 
@@ -48,7 +48,7 @@ export namespace ExternalUrl {
   export const myFarmBot = MY_FARMBOT_WEB_APP;
 
   const FBOS_RAW =
-    `${GITHUB_RAW}/${Org.FarmBot}/${FarmBotRepo.FarmBotOS}/staging`;
+    `${GITHUB_RAW}/${Org.FarmBot}/${FarmBotRepo.FarmBotOS}/prod`;
   export const featureMinVersions = `${FBOS_RAW}/${FbosFile.featureMinVersions}`;
   export const osReleaseNotes = `${FBOS_RAW}/${FbosFile.osReleaseNotes}`;
 

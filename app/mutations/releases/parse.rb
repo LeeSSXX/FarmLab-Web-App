@@ -1,20 +1,20 @@
 # FIND EXAMPLE JSON:
-# curl -s https://api.github.com/repos/farmbot/farmbot_os/releases/latest
+# curl -s https://api.github.com/repos/farmlab/farmbot_os/releases/latest
 module Releases
   # Github has a JSON format for their own concept of "releases".
   # FarmBot also has a concept of a "release", but it is not the same schema.
   # A single Github release contains multiple "assets" (*.fw files) that
   # we must convert into multiple FarmBot Release objects.
-  # 1 Github Release ==> multiple farmbot releases
+  # 1 Github Release ==> multiple farmlab releases
   #
   # This class serves as a means of turning a Github release (JSON)
   # into an array of hashes that can be passed `Release::Create`.
   #
   # Example JSON can be downloaded via:
-  # `curl -s https://api.github.com/repos/farmbot/farmbot_os/releases/latest`
+  # `curl -s https://api.github.com/repos/farmlab/farmbot_os/releases/latest`
   class Parse < Mutations::Command
     CONTENT_TYPE = "application/octet-stream"
-    PREFIX = "farmbot"
+    PREFIX = "farmlab"
     SUFFIX = ".fw"
     STATE = "uploaded"
 
@@ -25,7 +25,7 @@ module Releases
       string :tag_name
       array :assets do
         hash do
-          # "farmbot-rpi-11.0.1.fw"
+          # "farmlab-rpi-11.0.1.fw"
           string :name
 
           # "application/octet-stream"
@@ -34,7 +34,7 @@ module Releases
           # "uploaded"
           string :state
 
-          # "https://github.com/FarmBot/farmbot_os/releases/download/v11.0.1/farmbot-rpi-11.0.1.fw"
+          # "https://github.com/FarmBot/farmbot_os/releases/download/v11.0.1/farmlab-rpi-11.0.1.fw"
           string :browser_download_url
         end
       end
@@ -54,7 +54,7 @@ module Releases
     private
 
     def convert_to_farmbot_release(asset)
-      platform = asset.fetch(:name).gsub("farmbot-", "").split("-").first
+      platform = asset.fetch(:name).gsub("farmlab-", "").split("-").first
       unless Release::PLATFORMS.include?(platform)
         raise "Invalid platform?: #{platform}"
       end

@@ -16,7 +16,7 @@ NOT SAVING %{platform} %{version} (%{channel})
 namespace :releases do
   module ReleaseTask
     def self.download_metadata(tag_name)
-      real_url = "https://api.github.com/repos/farmbot/farmbot_os/releases/tags/#{tag_name}"
+      real_url = "https://api.github.com/repos/LeeSSXX/farmlab_os/releases/tags/#{tag_name}"
       JSON.parse(URI.parse(real_url).open.read, symbolize_names: true)
     end
 
@@ -30,7 +30,7 @@ namespace :releases do
     end
 
     def self.get_release_list
-      uri = "https://api.github.com/repos/farmbot/farmbot_os/releases"
+      uri = "https://api.github.com/repos/LeeSSXX/farmlab_os/releases"
       file = URI.parse(uri).open
       raw_json = file.read
       json = JSON.parse(raw_json, symbolize_names: true).pluck(:tag_name)
@@ -135,7 +135,7 @@ namespace :releases do
     Devices::UnattendedUpgrade.delay.run!()
   end
 
-  desc "Publish the latest release found on farmbot/farmbot_os github org"
+  desc "Publish the latest release found on farmbot/farmlab_os github org"
   task publish: :environment do
     ReleaseTask.print_all_existing_releases
     choices = ReleaseTask.get_release_list
