@@ -84,10 +84,18 @@ sudo docker compose run web npm run test
   # To update to later versions of FarmBot,
   # shut down the server, create a database backup
   # and run commands below.
-  git pull https://github.com/FarmBot/Farmbot-Web-App.git main
-  sudo docker compose build
-  sudo docker compose run web bundle install   # <== ⚠ UPGRADE USERS ONLY
-  sudo docker compose run web npm install      # <== ⚠ UPGRADE USERS ONLY
-  sudo docker compose run web rails db:migrate # <== ⚠ UPGRADE USERS ONLY
+  git pull https://github.com/FarmBot/Farmbot-Web-App.git marvin_devel
+  # Build the latest image
+  docker compose build
+  # Install the correct version of bundler for the project
+  docker compose run web gem install bundler
+  # Install application specific Ruby dependencies
+  docker compose run web bundle install
+  # Install application specific Javascript deps
+  docker compose run web npm install
+  # Create a database in PostgreSQL
+  docker compose run web bundle exec rails db:migrate
+  # Build the UI assets via ParcelJS
+  docker compose run web rake assets:precompile
 # === END OPTIONAL UPGRADES ^
 
