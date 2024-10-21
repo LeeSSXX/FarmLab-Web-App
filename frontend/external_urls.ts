@@ -27,6 +27,8 @@ export namespace ExternalUrl {
   const EDU_DOCS = "https://oer.farmlab.ltd";
   const SOFTWARE_DOCS = "https://software.farmlab.ltd";
   const DEVELOPER_DOCS = "https://developer.farmlab.ltd";
+  const SOLAR = "https://solar.farmlab.ltd";
+  const RAISED_BED = "https://bed.farmlab.ltd";
   const FORUM = "https://forum.farmlab.ltd";
   const SHOPIFY_CDN = "https://cdn.shopify.com/s/files/1/2040/0289/files";
   const YOUTUBE = "https://www.youtube.com/embed/";
@@ -67,6 +69,9 @@ export namespace ExternalUrl {
   export const developerDocs = `${DEVELOPER_DOCS}/docs`;
   export const softwareForum = `${FORUM}/c/software`;
 
+  export const solar = SOLAR;
+  export const raisedBed = RAISED_BED;
+
   export namespace OpenFarm {
     export const cropApi = `${OPENFARM}/api/v1/crops/`;
     export const cropBrowse = `${OPENFARM}/crops/`;
@@ -83,13 +88,17 @@ export namespace ExternalUrl {
     const motorMovement = `${YOUTUBE}HGuoD23s30A`;
     export const movements = `${motorMovement}?end=107`;
     export const motorTuning = `${motorMovement}?start=107`;
+    export const tools = `${YOUTUBE}f_GqlMAMWPk`;
   }
 
   const PRODUCTS = `${FARMBOT}/products`;
+  const KITS = `${FARMBOT}/collections/farmbot-kits/products`;
   export namespace Store {
     export const home = FARMBOT;
     export const cameraCalibrationCard = `${PRODUCTS}/camera-calibration-card`;
     export const cameraReplacement =
       `${PRODUCTS}/genesis-v1-5-express-v1-0-camera-free-replacement`;
+    export const genesisKit = `${KITS}/farmbot-genesis-v1-7`;
+    export const genesisXlKit = `${KITS}/farmbot-genesis-xl-v1-7`;
   }
 }
