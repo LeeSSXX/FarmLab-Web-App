@@ -9,7 +9,7 @@ export interface InputLengthIndicatorProps {
   alwaysShow?: boolean;
 }
 
-const DEFAULT_LENGTH_LIMIT = 3000;
+const DEFAULT_LENGTH_LIMIT = 5000;
 
 type LengthLimitLookup = Partial<Record<Fields, number>>;
 
