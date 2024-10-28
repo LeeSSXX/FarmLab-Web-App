@@ -56,14 +56,14 @@ module Devices
       end
 
       module PublicSequenceNames
-        DISPENSE_WATER = "Dispense Water"
+        DISPENSE_WATER = "浇水/毫升"
         SOIL_HEIGHT_GRID = "Soil Height Grid"
         GRID = "Grid"
-        WATER_ALL = "Water All"
+        WATER_ALL = "遍历浇水"
         PHOTO_GRID = "Photo Grid"
         WEED_DETECTION_GRID = "Weed Detection Grid"
-        MOUNT_TOOL = "Mount Tool"
-        DISMOUNT_TOOL = "Dismount Tool"
+        MOUNT_TOOL = "挂载工具"
+        DISMOUNT_TOOL = "卸载工具"
         MOW_ALL_WEEDS = "Mow All Weeds"
         PICK_FROM_SEED_TRAY = "Pick from Seed Tray"
       end

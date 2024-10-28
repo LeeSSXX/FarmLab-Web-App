@@ -72,18 +72,18 @@ module Devices
         # SEQUENCES ==============================
         :sequences_mount_tool,
         :sequences_dismount_tool,
+        :sequences_dispense_water,
         :sequences_pick_up_seed,
         :sequences_plant_seed,
         :sequences_find_home,
         :sequences_take_photo_of_plant,
+        :sequences_photo_grid,
         :sequences_water_plant,
         :sequences_water_all_plants,
-        :sequences_water_all,
-        :sequences_photo_grid,
+        :sequences_water_all,       
         :sequences_weed_detection_grid,
         :sequences_soil_height_grid,
-        :sequences_grid,
-        :sequences_dispense_water,
+        :sequences_grid,        
         :sequences_mow_all_weeds,
         :sequences_pick_from_seed_tray,
 
@@ -136,8 +136,8 @@ module Devices
       def sequences_water_plant
         s = SequenceSeeds::WATER_PLANT.deep_dup
 
-        s.dig(:body, 1, :args, :pin_number, :args)[:pin_id] = water_id
-        s.dig(:body, 3, :args, :pin_number, :args)[:pin_id] = water_id
+        s.dig(:body, 0, :args)[:sequence_id] = mount_tool_id
+        s.dig(:body, 0, :body, 0, :args, :data_value, :args)[:tool_id] = watering_nozzle_id
 
         Sequences::Create.run!(s, device: device)
       end
@@ -163,9 +163,8 @@ module Devices
       def sequences_water_all_plants
         s = SequenceSeeds::WATER_ALL_PLANTS.deep_dup
 
-        s.dig(:body, 0, :args)[:sequence_id] = water_plant_id
-        s.dig(:body, 0, :body, 0, :args, :data_value, :args)[:point_group_id] =
-          all_plants_group_id
+        s.dig(:body, 0, :args)[:sequence_id] = mount_tool_id
+        s.dig(:body, 0, :body, 0, :args, :data_value, :args)[:tool_id] = watering_nozzle_id
 
         Sequences::Create.run!(s, device: device)
       end
@@ -173,11 +172,13 @@ module Devices
       def sequences_find_home; end
 
       def sequences_water_all
-        success = install_sequence_version_by_name(PublicSequenceNames::WATER_ALL)
-        if !success
-          s = SequenceSeeds::WATER_ALL.deep_dup
-          Sequences::Create.run!(s, device: device)
-        end
+        s = SequenceSeeds::WATER_ALL.deep_dup
+        
+        s.dig(:body, 0, :args)[:sequence_id] = mount_tool_id
+        s.dig(:body, 0, :body, 0, :args, :data_value, :args)[:tool_id] = watering_nozzle_id
+        s.dig(:body, 2, :args)[:sequence_id] = dispense_water_id
+
+        Sequences::Create.run!(s, device: device)        
       end
 
       def sequences_photo_grid
@@ -343,6 +344,10 @@ module Devices
         @seeder_id ||= device.tools.find_by!(name: ToolNames::SEEDER).id
       end
 
+      def watering_nozzle_id
+        @watering_nozzle_id ||= device.tools.find_by!(name: ToolNames::WATERING_NOZZLE).id
+      end
+
       def water_plant_id
         @water_plant_id ||= device.sequences.find_by!(name: "Water plant").id
       end
@@ -353,6 +358,14 @@ module Devices
 
       def water_id
         @water_id ||= device.peripherals.find_by!(label: "Water").id
+      end
+
+      def mount_tool_id
+        @mount_tool_id = device.sequences.find_by!(name: PublicSequenceNames::MOUNT_TOOL).id
+      end
+
+      def dispense_water_id
+        @dispense_water_id ||= device.sequences.find_by!(name: "浇水/毫升").id
       end
 
       def vacuum_id
