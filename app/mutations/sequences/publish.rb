@@ -12,8 +12,7 @@ module Sequences
                    resource_update resource_type rhs safe_z scope_declaration
                    send_message sequence set_servo_angle special_value speed
                    speed_overwrite string take_photo text text_placeholder value
-                   variable_declaration variance version wait x y z zero
-                   named_pin pin_id tool_id update_resource write_pin tool sequence_id)
+                   variable_declaration variance version wait x y z zero )
     AUTHORIZATION_REQUIRED = "For security reasons, we can't publish" \
                              " sequences that contain the following content: "
     required do
