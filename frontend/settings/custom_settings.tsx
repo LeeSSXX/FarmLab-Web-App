@@ -7,9 +7,11 @@ import { Collapse } from "@blueprintjs/core";
 import { t } from "../i18next_wrapper";
 import { EnvEditor } from "../photos/data_management/env_editor";
 import { devDocLinkClick } from "../ui";
+import { useNavigate } from "react-router";
 
-export const CustomSettings = (props: CustomSettingsProps) =>
-  <Highlight className={"section"}
+export const CustomSettings = (props: CustomSettingsProps) => {
+  const navigate = useNavigate();
+  return <Highlight className={"section"}
     settingName={DeviceSetting.customSettings}>
     <Header
       title={DeviceSetting.customSettings}
@@ -17,13 +19,13 @@ export const CustomSettings = (props: CustomSettingsProps) =>
       dispatch={props.dispatch}
       expanded={props.settingsPanelState.custom_settings} />
     <Collapse isOpen={!!props.settingsPanelState.custom_settings}>
-      <div className={"env-editor-lua"}>
+      <div className={"settings-warning-banner env-editor-lua"}>
         <p>
           {t(Content.FARMWARE_ENV_EDITOR_LUA)}
           {" "}
           {t("Refer to the")}
           {" "}
-          <a onClick={devDocLinkClick("lua")}>
+          <a onClick={devDocLinkClick("lua", navigate)}>
             {t("developer documentation")}
           </a>
           {" "}
@@ -36,3 +38,4 @@ export const CustomSettings = (props: CustomSettingsProps) =>
         farmwareEnvs={props.farmwareEnvs} />
     </Collapse>
   </Highlight>;
+};

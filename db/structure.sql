@@ -1,6 +1,7 @@
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -8,13 +9,6 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
-
---
--- Name: public; Type: SCHEMA; Schema: -; Owner: -
---
-
--- *not* creating schema, since initdb creates it
-
 
 --
 -- Name: hstore; Type: EXTENSION; Schema: -; Owner: -
@@ -159,7 +153,9 @@ CREATE TABLE public.ai_feedbacks (
     prompt character varying(500),
     reaction character varying(25),
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    model character varying(30),
+    temperature character varying(5)
 );
 
 
@@ -1540,7 +1536,7 @@ CREATE VIEW public.resource_update_steps AS
             edge_nodes.kind,
             edge_nodes.value
            FROM public.edge_nodes
-          WHERE (((edge_nodes.kind)::text = 'resource_type'::text) AND ((edge_nodes.value)::text = ANY ((ARRAY['"GenericPointer"'::character varying, '"ToolSlot"'::character varying, '"Plant"'::character varying])::text[])))
+          WHERE (((edge_nodes.kind)::text = 'resource_type'::text) AND ((edge_nodes.value)::text = ANY (ARRAY[('"GenericPointer"'::character varying)::text, ('"ToolSlot"'::character varying)::text, ('"Plant"'::character varying)::text])))
         ), resource_id AS (
          SELECT edge_nodes.primary_node_id,
             edge_nodes.kind,
@@ -1715,7 +1711,7 @@ ALTER SEQUENCE public.sequence_publications_id_seq OWNED BY public.sequence_publ
 --
 
 CREATE VIEW public.sequence_usage_reports AS
- SELECT sequences.id AS sequence_id,
+ SELECT id AS sequence_id,
     ( SELECT count(*) AS count
            FROM public.edge_nodes
           WHERE (((edge_nodes.kind)::text = 'sequence_id'::text) AND ((edge_nodes.value)::integer = sequences.id))) AS edge_node_count,
@@ -2010,7 +2006,7 @@ CREATE TABLE public.web_app_configs (
     show_pins boolean DEFAULT false,
     disable_emergency_unlock_confirmation boolean DEFAULT true,
     map_size_x integer DEFAULT 2900,
-    map_size_y integer DEFAULT 1400,
+    map_size_y integer DEFAULT 1230,
     expand_step_options boolean DEFAULT false,
     hide_sensors boolean DEFAULT false,
     confirm_plant_deletion boolean DEFAULT true,
@@ -2037,7 +2033,8 @@ CREATE TABLE public.web_app_configs (
     default_plant_depth integer DEFAULT 5,
     show_missed_step_plot boolean DEFAULT false,
     enable_3d_electronics_box_top boolean DEFAULT true,
-    three_d_garden boolean DEFAULT false
+    three_d_garden boolean DEFAULT false,
+    dark_mode boolean DEFAULT false
 );
 
 
@@ -3709,14 +3706,6 @@ ALTER TABLE ONLY public.plant_templates
 
 
 --
--- Name: plant_templates plant_templates_saved_garden_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.plant_templates
-    ADD CONSTRAINT plant_templates_saved_garden_id_fk FOREIGN KEY (saved_garden_id) REFERENCES public.saved_gardens(id);
-
-
---
 -- Name: point_group_items point_group_items_point_group_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3989,6 +3978,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20240202171922'),
 ('20240207234421'),
 ('20240405171128'),
-('20240625195838');
+('20240625195838'),
+('20241203194030'),
+('20241203211516'),
+('20250221191831');
 
 

@@ -19,16 +19,15 @@ enum FbosFile {
 export namespace ExternalUrl {
   const GITHUB = "https://github.com";
   const GITHUB_RAW = "https://raw.githubusercontent.com";
-  const OPENFARM = "https://openfarm.cc";
-  const DOCS_HUB = "https://docs.farmlab.ltd";
-  const GENESIS_DOCS = "https://genesis.farmlab.ltd";
-  const EXPRESS_DOCS = "https://express.farmlab.ltd";
-  const META_DOCS = "https://meta.farmlab.ltd";
-  const EDU_DOCS = "https://oer.farmlab.ltd";
-  const SOFTWARE_DOCS = "https://software.farmlab.ltd";
-  const DEVELOPER_DOCS = "https://developer.farmlab.ltd";
-  const SOLAR = "https://solar.farmlab.ltd";
-  const RAISED_BED = "https://bed.farmlab.ltd";
+  const DOCS_HUB = "https://docs.farm.bot";
+  const GENESIS_DOCS = "https://genesis.farm.bot";
+  const EXPRESS_DOCS = "https://express.farm.bot";
+  const META_DOCS = "https://meta.farm.bot";
+  const EDU_DOCS = "https://oer.farm.bot";
+  const SOFTWARE_DOCS = "https://software.farm.bot";
+  const DEVELOPER_DOCS = "https://developer.farm.bot";
+  const SOLAR = "https://solar.farm.bot";
+  const RAISED_BED = "https://bed.farm.bot";
   const FORUM = "https://forum.farmlab.ltd";
   const SHOPIFY_CDN = "https://cdn.shopify.com/s/files/1/2040/0289/files";
   const YOUTUBE = "https://www.youtube.com/embed/";
@@ -72,12 +71,6 @@ export namespace ExternalUrl {
   export const solar = SOLAR;
   export const raisedBed = RAISED_BED;
 
-  export namespace OpenFarm {
-    export const cropApi = `${OPENFARM}/api/v1/crops/`;
-    export const cropBrowse = `${OPENFARM}/crops/`;
-    export const newCrop = `${OPENFARM}/en/crops/new`;
-  }
-
   export namespace Video {
     export const desktop =
       `${SHOPIFY_CDN}/Farm_Designer_Loop.mp4?9552037556691879018`;
@@ -98,7 +91,9 @@ export namespace ExternalUrl {
     export const cameraCalibrationCard = `${PRODUCTS}/camera-calibration-card`;
     export const cameraReplacement =
       `${PRODUCTS}/genesis-v1-5-express-v1-0-camera-free-replacement`;
-    export const genesisKit = `${KITS}/farmbot-genesis-v1-7`;
-    export const genesisXlKit = `${KITS}/farmbot-genesis-xl-v1-7`;
+    export const genesisKit = (version: string) =>
+      `${KITS}/farmbot-genesis-${version.replace(".", "-")}`;
+    export const genesisXlKit = (version: string) =>
+      `${KITS}/farmbot-genesis-xl-${version.replace(".", "-")}`;
   }
 }

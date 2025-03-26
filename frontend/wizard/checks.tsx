@@ -34,7 +34,7 @@ import {
 import { t } from "../i18next_wrapper";
 import {
   BlurableInput,
-  Checkbox, Col, docLink, DropDownItem, FBSelect, genesisDocLink, Row, ToggleButton,
+  Checkbox, docLink, DropDownItem, FBSelect, genesisDocLink, Row, ToggleButton,
 } from "../ui";
 import {
   changeFirmwareHardware, SEED_DATA_OPTIONS, SEED_DATA_OPTIONS_DDI,
@@ -87,7 +87,6 @@ import {
 } from "../photos/camera_calibration/constants";
 import { tourPath } from "../help/tours";
 import { TOURS } from "../help/tours/data";
-import { push } from "../history";
 import { FilePath } from "../internal_urls";
 import { BotPositionRows } from "../controls/move/bot_position_rows";
 import {
@@ -103,6 +102,7 @@ import { WaterFlowRateInput } from "../tools/edit_tool";
 import { RPI_OPTIONS } from "../settings/fbos_settings/rpi_model";
 import { BoxTop } from "../settings/pin_bindings/box_top";
 import { OtaTimeSelector } from "../settings/fbos_settings/ota_time_selector";
+import { useNavigate } from "react-router";
 
 export const Language = (props: WizardStepComponentProps) => {
   const user = getUserAccountSettings(props.resources);
@@ -155,7 +155,7 @@ const CameraCheckBase = (props: CameraCheckBaseProps) => {
     setError(true);
   }
 
-  return <div className={"camera-check"}
+  return <div className={"camera-check grid"}
     onClick={() => {
       setPrevImageId(getLastImageId());
       setPrevLogTime(getLastLogTimestamp());
@@ -191,7 +191,9 @@ export const CameraCalibrationCard = (props: WizardStepComponentProps) => {
 
 export const SwitchCameraCalibrationMethod =
   (props: WizardOutcomeComponentProps) => {
+    const navigate = useNavigate();
     return <CameraCalibrationMethodConfig
+      navigate={navigate}
       wdEnvGet={key => envGet(key, prepopulateEnv(getEnv(props.resources)))}
       saveEnvVar={(key, value) =>
         props.dispatch(saveOrEditFarmwareEnv(props.resources)(
@@ -229,7 +231,7 @@ const MeasureSoilHeight = (props: CameraCheckBaseProps) => {
       env={env}
       userEnv={userEnv}
       farmwareEnvs={farmwareEnvs}
-      saveFarmwareEnv={saveOrEditFarmwareEnv(props.resources)}
+      saveFarmwareEnv={saveOrEditFarmwareEnv(props.resources, true)}
       botOnline={botOnline}
       hideAdvanced={true}
       hideResets={true}
@@ -715,19 +717,15 @@ export const CameraOffset = (props: WizardStepComponentProps) => {
       props.dispatch(saveOrEditFarmwareEnv(props.resources)(
         key, JSON.stringify(formatEnvKey(key, value)))),
   };
-  return <Row>
-    <Col xs={6}>
-      <NumberBoxConfig {...common}
-        settingName={DeviceSetting.cameraOffsetX}
-        configKey={"CAMERA_CALIBRATION_camera_offset_x"}
-        helpText={helpText} />
-    </Col>
-    <Col xs={6}>
-      <NumberBoxConfig {...common}
-        settingName={DeviceSetting.cameraOffsetY}
-        configKey={"CAMERA_CALIBRATION_camera_offset_y"}
-        helpText={helpText} />
-    </Col>
+  return <Row className="grid-2-col">
+    <NumberBoxConfig {...common}
+      settingName={DeviceSetting.cameraOffsetX}
+      configKey={"CAMERA_CALIBRATION_camera_offset_x"}
+      helpText={helpText} />
+    <NumberBoxConfig {...common}
+      settingName={DeviceSetting.cameraOffsetY}
+      configKey={"CAMERA_CALIBRATION_camera_offset_y"}
+      helpText={helpText} />
   </Row>;
 };
 
@@ -735,20 +733,18 @@ export const CameraImageOrigin = (props: WizardStepComponentProps) => {
   const env = getEnv(props.resources);
   const wDEnv = prepopulateEnv(env);
   return <Row>
-    <Col xs={12}>
-      <DropdownConfig
-        settingName={DeviceSetting.originLocationInImage}
-        wdEnvGet={key => envGet(key, wDEnv)}
-        onChange={(key, value) =>
-          props.dispatch(saveOrEditFarmwareEnv(props.resources)(
-            key, JSON.stringify(formatEnvKey(key, value))))}
-        list={ORIGIN_DROPDOWNS()}
-        configKey={"CAMERA_CALIBRATION_image_bot_origin_location"}
-        helpText={t(ToolTips.IMAGE_BOT_ORIGIN_LOCATION, {
-          defaultOrigin: SPECIAL_VALUE_DDI()[WD_KEY_DEFAULTS[
-            "CAMERA_CALIBRATION_image_bot_origin_location"]].label
-        })} />
-    </Col>
+    <DropdownConfig
+      settingName={DeviceSetting.originLocationInImage}
+      wdEnvGet={key => envGet(key, wDEnv)}
+      onChange={(key, value) =>
+        props.dispatch(saveOrEditFarmwareEnv(props.resources)(
+          key, JSON.stringify(formatEnvKey(key, value))))}
+      list={ORIGIN_DROPDOWNS()}
+      configKey={"CAMERA_CALIBRATION_image_bot_origin_location"}
+      helpText={t(ToolTips.IMAGE_BOT_ORIGIN_LOCATION, {
+        defaultOrigin: SPECIAL_VALUE_DDI()[WD_KEY_DEFAULTS[
+          "CAMERA_CALIBRATION_image_bot_origin_location"]].label
+      })} />
   </Row>;
 };
 
@@ -805,15 +801,16 @@ export const CameraReplacement = () =>
     </p>
   </div>;
 
-export const Tour = (tourSlug: string) =>
-  (props: WizardStepComponentProps) =>
+export const Tour = (tourSlug: string) => {
+  return (props: WizardStepComponentProps) =>
     <button className={"fb-button green tour-start"}
       title={t("Start tour")}
       onClick={() => {
         const firstStep = TOURS()[tourSlug].steps[0];
         props.dispatch({ type: Actions.SET_TOUR, payload: tourSlug });
         props.dispatch({ type: Actions.SET_TOUR_STEP, payload: firstStep.slug });
-        push(tourPath(firstStep.url, tourSlug, firstStep.slug));
+        props.navigate(tourPath(firstStep.url, tourSlug, firstStep.slug));
       }}>
       {t("Start tour")}
     </button>;
+};

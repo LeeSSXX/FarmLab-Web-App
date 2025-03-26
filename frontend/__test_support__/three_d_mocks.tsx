@@ -9,6 +9,20 @@ import {
 import * as THREE from "three";
 import React, { ReactNode } from "react";
 import { TransitionFn, UseSpringProps } from "@react-spring/three";
+import { ThreeElements } from "@react-three/fiber";
+import { Cloud, Clouds, Image, Tube } from "@react-three/drei";
+
+const GroupForTests = (props: ThreeElements["group"]) =>
+  // @ts-expect-error Property does not exist on type JSX.IntrinsicElements
+  <group {...props} />;
+
+jest.mock("../three_d_garden/components", () => ({
+  ...jest.requireActual("../three_d_garden/components"),
+  Group: (props: ThreeElements["group"]) =>
+    props.visible === false
+      ? <></>
+      : <GroupForTests {...props} />,
+}));
 
 jest.mock("three/examples/jsm/Addons.js", () => ({
   SVGLoader: class {
@@ -21,6 +35,10 @@ jest.mock("@react-three/fiber", () => ({
   Canvas: ({ children }: { children: ReactNode }) => <div>{children}</div>,
   addEffect: jest.fn(),
   useFrame: jest.fn(x => x({ clock: { getElapsedTime: jest.fn(() => 0) } })),
+  useThree: jest.fn(() => ({
+    pointer: { x: 0, y: 0 },
+    camera: new THREE.PerspectiveCamera(),
+  })),
 }));
 
 jest.mock("@react-spring/three", () => ({
@@ -29,15 +47,21 @@ jest.mock("@react-spring/three", () => ({
     (props.to as TransitionFn)?.(next);
     return { ...props, ...props.from };
   },
-  animated: {
-    mesh: ({ children }: { children: ReactNode }) =>
-      <div className={"animated"}>{children}</div>,
-    meshPhongMaterial: () => <div />,
-    group: ({ children }: { children: ReactNode }) =>
-      <div className={"group"}>{children}</div>,
-    pointLight: () => <div />,
-  }
+  // mocks for `<animated.mesh...` and similar:
+  //   animated: {
+  //     mesh: ({ children }: { children: ReactNode }) =>
+  //       <div className={"animated"}>{children}</div>,
+  //     meshPhongMaterial: () => <div />,
+  //     group: ({ children }: { children: ReactNode }) =>
+  //       <div className={"group"}>{children}</div>,
+  //     pointLight: () => <div />,
+  //   },
+  // mocks for `const AnimatedMesh = animated(Mesh); ... <AnimatedMesh...`:
+  animated: () => ({ children }: { children?: ReactNode }) =>
+    <div className={"animated"}>{children}</div>,
 }));
+
+type Event = React.MouseEvent<HTMLDivElement, MouseEvent>;
 
 jest.mock("@react-three/drei", () => {
   const useGLTF = jest.fn((key: string) => ({
@@ -373,6 +397,12 @@ jest.mock("@react-three/drei", () => {
         PaletteMaterial001: {} as THREE.MeshStandardMaterial,
       },
     },
+    [ASSETS.models.seedTrough]: {
+      nodes: { Seed_Trough: {} as THREE.Mesh },
+      materials: {
+        [SeedTroughAssemblyMaterial.two]: {} as THREE.MeshStandardMaterial,
+      },
+    },
     [ASSETS.models.seedTroughAssembly]: {
       nodes: {
         mesh0_mesh: {} as THREE.Mesh,
@@ -444,8 +474,19 @@ jest.mock("@react-three/drei", () => {
         [PartName.toolbay3Logo]: {} as THREE.Mesh,
       },
     },
+    [ASSETS.models.toolbay1]: {
+      nodes: {
+        [PartName.toolbay1]: {} as THREE.Mesh,
+        [PartName.toolbay1Logo]: {} as THREE.Mesh,
+      },
+    },
     [ASSETS.models.seeder]: {
       nodes: { [PartName.seeder]: {} as THREE.Mesh },
+      materials: { PaletteMaterial001: {} as THREE.MeshStandardMaterial },
+    },
+    [ASSETS.models.weeder]: {
+      nodes: { [PartName.weeder]: {} as THREE.Mesh },
+      materials: { PaletteMaterial001: {} as THREE.MeshStandardMaterial },
     },
     [ASSETS.models.seedTray]: {
       nodes: { [PartName.seedTray]: {} as THREE.Mesh },
@@ -548,15 +589,36 @@ jest.mock("@react-three/drei", () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Box: (props: any) =>
       <div className={"box" + props.name} {...props}>{props.children}</div>,
-    Extrude: ({ name }: { name: string }) =>
-      <div className={"extrude"}>{name}</div>,
+    Extrude: ({ name, onClick, onPointerMove }: {
+      name: string,
+      onClick: (event: Event) => void,
+      onPointerMove: (event: Event) => void,
+    }) =>
+      <div className={"extrude"}
+        onPointerMove={e =>
+          onPointerMove({
+            point: { x: 0, y: 0 },
+            ...e,
+          } as unknown as Event)}
+        onClick={e =>
+          onClick({
+            // @ts-expect-error: This spread always overwrites this property.
+            stopPropagation: jest.fn(),
+            point: { x: 0, y: 0 },
+            ...e,
+          } as unknown as Event)}>
+        {name}
+      </div>,
     Line: ({ name }: { name: string }) =>
       <div className={"line"}>{name}</div>,
     Trail: ({ name }: { name: string }) =>
       <div className={"trail"}>{name}</div>,
-    Tube: ({ name, children }: { name: string, children: ReactNode }) =>
-      <div className={"tube" + name}>{children}</div>,
-    Text: ({ children }: { children: ReactNode }) =>
+    Tube: (props: React.ComponentProps<typeof Tube>) =>
+      // @ts-expect-error geometry props not assignable to div
+      <div className={"tube"} {...props}>{props.children}</div>,
+    Center: ({ children }: { children: ReactNode }) =>
+      <div className={"center"}>{children}</div>,
+    Text3D: ({ children }: { children: ReactNode }) =>
       <div className={"text"}>{children}</div>,
     Detailed: ({ children }: { children: ReactNode }) =>
       <div className={"detailed"}>{children}</div>,
@@ -580,14 +642,17 @@ jest.mock("@react-three/drei", () => {
       <div className={"circle" + name}>{children}</div>,
     Stats: ({ name }: { name: string }) =>
       <div className={"stats"}>{name}</div>,
-    Billboard: ({ name }: { name: string }) =>
-      <div className={"billboard"}>{name}</div>,
-    Image: ({ name }: { name: string }) =>
-      <div className={"image"}>{name}</div>,
-    Clouds: ({ name }: { name: string }) =>
-      <div className={"clouds"}>{name}</div>,
-    Cloud: ({ name }: { name: string }) =>
-      <div className={"cloud"}>{name}</div>,
+    Billboard: ({ name, children }: { name: string, children: ReactNode }) =>
+      <div className={"billboard" + name}>{children}</div>,
+    Image: (props: React.ComponentProps<typeof Image>) =>
+      // @ts-expect-error geometry props not assignable to div
+      <div className={"image"} {...props}>{props.name} {props.url}</div>,
+    Clouds: (props: React.ComponentProps<typeof Clouds>) =>
+      // @ts-expect-error geometry props not assignable to div
+      <div className={"clouds"} {...props}>{props.children}</div>,
+    Cloud: (props: React.ComponentProps<typeof Cloud>) =>
+      // @ts-expect-error geometry props not assignable to div
+      <div className={"cloud"} {...props} />,
     OrthographicCamera: ({ name }: { name: string }) =>
       <div className={"orthographic-camera"}>{name}</div>,
   };

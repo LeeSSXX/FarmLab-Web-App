@@ -1,11 +1,11 @@
-import { isUndefined, last } from "lodash";
-import { getPathArray } from "./history";
+import { isUndefined, kebabCase, last } from "lodash";
 import { t } from "./i18next_wrapper";
 
 export namespace Path {
   const appended = (path: string | number | undefined) => path ? "/" + path : "";
   const highlight = (path: string | undefined) => path ? "?highlight=" + path : "";
   const page = (path: string | undefined) => path ? "?page=" + path : "";
+  export const getPathArray = () => window.location.pathname.split("/");
 
   export const startsWith = (path: string) =>
     getPathArray().join("/").startsWith(withApp(path));
@@ -15,7 +15,6 @@ export namespace Path {
   export const lastChunkEquals = (chunk: string) => chunk == getLastChunk();
   export const lastChunkIsNum = (): boolean => !isNaN(parseInt(getLastChunk()));
 
-  export const route = (path: string) => path.replace("/app", "");
   export const withApp = (path: string) =>
     path.startsWith("/app") ? path : "/app" + path;
   export const mock = withApp;
@@ -93,6 +92,7 @@ export namespace Path {
   export const idIndex = (path: string) => path.split("/").length + 0;
   export const getSlug = (path: string): string =>
     getPathArray()[Path.idIndex(path)] || "";
+  export const getCropSlug = () => kebabCase(Path.getSlug(Path.cropSearch()));
 }
 
 export namespace FilePath {

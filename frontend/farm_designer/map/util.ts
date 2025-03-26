@@ -1,4 +1,4 @@
-import { BotOriginQuadrant } from "../interfaces";
+import { BotOriginQuadrant, DesignerState } from "../interfaces";
 import { McuParams, Xyz } from "farmbot";
 import { StepsPerMm } from "../../devices/interfaces";
 import {
@@ -35,6 +35,20 @@ export function round(num: number) {
   return (Math.round(num / SNAP) * SNAP);
 }
 
+/**
+ * Calculate the distance between two points.
+ */
+export function xyDistance(
+  a: { x: number, y: number },
+  b: { x: number, y: number },
+): number {
+  const dx = a.x - b.x;
+  const dy = a.y - b.y;
+  const dx2 = Math.pow(dx, 2);
+  const dy2 = Math.pow(dy, 2);
+  return Math.sqrt(dx2 + dy2);
+}
+
 /*
  * Map coordinate calculations
  *
@@ -61,8 +75,8 @@ export enum MapPanelStatus {
 }
 
 /** Get farm designer side panel status. */
-export const getPanelStatus = (): MapPanelStatus => {
-  if (Path.equals(Path.designer())) {
+export const getPanelStatus = (designer: DesignerState): MapPanelStatus => {
+  if (!designer.panelOpen) {
     return isMobile() ? MapPanelStatus.mobileClosed : MapPanelStatus.closed;
   }
   const mode = getMode();
@@ -75,8 +89,8 @@ export const getPanelStatus = (): MapPanelStatus => {
 };
 
 /** Get panel status class name for farm designer. */
-export const mapPanelClassName = () => {
-  switch (getPanelStatus()) {
+export const mapPanelClassName = (designer: DesignerState) => {
+  switch (getPanelStatus(designer)) {
     case MapPanelStatus.short: return "short-panel";
     case MapPanelStatus.mobileClosed: return "panel-closed-mobile";
     case MapPanelStatus.closed: return "panel-closed";
@@ -90,12 +104,12 @@ export const mapPanelClassName = () => {
 export const getMapPadding =
   (panelStatus: MapPanelStatus): { left: number, top: number } => {
     switch (panelStatus) {
-      case MapPanelStatus.short: return { left: 20, top: 350 };
-      case MapPanelStatus.mobileClosed: return { left: 20, top: 160 };
-      case MapPanelStatus.closed: return { left: 20, top: 110 };
+      case MapPanelStatus.short: return { left: 10, top: 350 };
+      case MapPanelStatus.mobileClosed: return { left: 10, top: 160 };
+      case MapPanelStatus.closed: return { left: 10, top: 90 };
       case MapPanelStatus.open:
       default:
-        return { left: 468, top: 110 };
+        return { left: 475, top: 90 };
     }
   };
 
@@ -330,13 +344,18 @@ export const savedGardenOpen = () =>
 const getZoomLevelFromMap = (map: Element) =>
   parseFloat((window.getComputedStyle(map).transform || "(1").split("(")[1]);
 
+export interface GetGardenCoordinatesProps {
+  mapTransformProps: MapTransformProps;
+  gridOffset: AxisNumberProperty;
+  pageX: number;
+  pageY: number;
+  designer: DesignerState;
+}
+
 /** Get the garden map coordinate of a cursor or screen interaction. */
-export const getGardenCoordinates = (props: {
-  mapTransformProps: MapTransformProps,
-  gridOffset: AxisNumberProperty,
-  pageX: number,
-  pageY: number,
-}): AxisNumberProperty | undefined => {
+export const getGardenCoordinates = (
+  props: GetGardenCoordinatesProps,
+): AxisNumberProperty | undefined => {
   const el = document.querySelector(".drop-area-svg");
   const map = document.querySelector(".farm-designer-map");
   const page = document.querySelector(".farm-designer");
@@ -348,7 +367,7 @@ export const getGardenCoordinates = (props: {
       mapTransformProps: props.mapTransformProps,
       gridOffset: props.gridOffset,
       zoomLvl,
-      panelStatus: getPanelStatus(),
+      panelStatus: getPanelStatus(props.designer),
     };
     return translateScreenToGarden(params);
   } else {

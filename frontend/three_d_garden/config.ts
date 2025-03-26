@@ -67,13 +67,17 @@ export interface Config {
   cableDebug: boolean;
   zoomBeaconDebug: boolean;
   animate: boolean;
+  distanceIndicator: string;
+  kitVersion: string;
+  negativeZ: boolean;
+  waterFlow: boolean;
 }
 
 export const INITIAL: Config = {
   sizePreset: "Genesis",
   bedType: "Standard",
   otherPreset: "Initial",
-  label: "FarmBot Genesis v1.7",
+  label: "FarmBot Genesis",
   botSizeX: 2720,
   botSizeY: 1230,
   botSizeZ: 500,
@@ -87,7 +91,7 @@ export const INITIAL: Config = {
   columnLength: 500,
   zAxisLength: 1000,
   bedXOffset: 140,
-  bedYOffset: 60,
+  bedYOffset: 20,
   bedZOffset: 0,
   zGantryOffset: 140,
   bedWidthOuter: 1360,
@@ -101,7 +105,7 @@ export const INITIAL: Config = {
   soilHeight: 500,
   plants: "Spring",
   labels: false,
-  labelsOnHover: true,
+  labelsOnHover: false,
   ground: true,
   grid: false,
   axes: false,
@@ -138,10 +142,15 @@ export const INITIAL: Config = {
   cableDebug: false,
   zoomBeaconDebug: false,
   animate: true,
+  distanceIndicator: "",
+  kitVersion: "v1.7",
+  negativeZ: false,
+  waterFlow: false,
 };
 
 export const STRING_KEYS = [
   "sizePreset", "bedType", "otherPreset", "label", "plants", "tool", "scene",
+  "distanceIndicator", "kitVersion",
 ];
 
 export const NUMBER_KEYS = [
@@ -158,7 +167,8 @@ export const BOOLEAN_KEYS = [
   "viewCube", "stats", "config", "zoom", "pan", "bounds", "threeAxes",
   "xyDimensions", "zDimension", "promoInfo", "settingsBar", "zoomBeacons",
   "solar", "utilitiesPost", "packaging", "lab", "people", "lowDetail",
-  "eventDebug", "cableDebug", "zoomBeaconDebug", "animate",
+  "eventDebug", "cableDebug", "zoomBeaconDebug", "animate", "negativeZ",
+  "waterFlow",
 ];
 
 export const PRESETS: Record<string, Config> = {
@@ -187,7 +197,7 @@ export const PRESETS: Record<string, Config> = {
     ...INITIAL,
     sizePreset: "Genesis",
     bedType: "Standard",
-    label: "FarmBot Genesis v1.7",
+    label: "FarmBot Genesis",
     botSizeX: 2720,
     botSizeY: 1230,
     botSizeZ: 500,
@@ -195,7 +205,7 @@ export const PRESETS: Record<string, Config> = {
     columnLength: 500,
     zAxisLength: 1000,
     bedXOffset: 140,
-    bedYOffset: 60,
+    bedYOffset: 20,
     zGantryOffset: 140,
     bedWidthOuter: 1360,
     bedLengthOuter: 3000,
@@ -208,7 +218,7 @@ export const PRESETS: Record<string, Config> = {
     ...INITIAL,
     sizePreset: "Genesis XL",
     bedType: "Standard",
-    label: "FarmBot Genesis XL v1.7",
+    label: "FarmBot Genesis XL",
     botSizeX: 5720,
     botSizeY: 2730,
     botSizeZ: 500,
@@ -216,7 +226,7 @@ export const PRESETS: Record<string, Config> = {
     columnLength: 500,
     zAxisLength: 1000,
     bedXOffset: 140,
-    bedYOffset: 60,
+    bedYOffset: 20,
     zGantryOffset: 140,
     bedWidthOuter: 2860,
     bedLengthOuter: 6000,
@@ -276,6 +286,7 @@ export const PRESETS: Record<string, Config> = {
     cableDebug: false,
     zoomBeaconDebug: false,
     animate: true,
+    distanceIndicator: "",
   },
   "Maximal": {
     ...INITIAL,
@@ -327,6 +338,8 @@ export const PRESETS: Record<string, Config> = {
     cableDebug: true,
     zoomBeaconDebug: true,
     animate: true,
+    distanceIndicator: "",
+    waterFlow: true,
   },
 };
 
@@ -346,7 +359,7 @@ const OTHER_CONFIG_KEYS: (keyof Config)[] = [
   "threeAxes", "xyDimensions", "zDimension", "labelsOnHover", "promoInfo",
   "settingsBar", "zoomBeacons", "pan", "solar", "utilitiesPost", "packaging", "lab",
   "people", "scene", "lowDetail", "eventDebug", "cableDebug", "zoomBeaconDebug",
-  "animate",
+  "animate", "distanceIndicator", "kitVersion", "negativeZ", "waterFlow",
 ];
 
 export const modifyConfig = (config: Config, update: Partial<Config>) => {
@@ -362,10 +375,10 @@ export const modifyConfig = (config: Config, update: Partial<Config>) => {
   }
   if (update.scene) {
     newConfig.lab = update.scene == "Lab";
-    newConfig.clouds = update.scene != "Lab";
-    newConfig.people = update.scene == "Lab";
+    newConfig.clouds = update.scene == "Outdoor";
+    newConfig.people = update.scene != "Outdoor";
     newConfig.bedType =
-      (update.scene == "Lab" && newConfig.sizePreset != "Genesis XL")
+      (update.scene != "Outdoor" && newConfig.sizePreset != "Genesis XL")
         ? "Mobile"
         : "Standard";
   }

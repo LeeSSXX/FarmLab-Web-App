@@ -5,10 +5,14 @@ import {
 import React from "react";
 import { INITIAL } from "../config";
 import { clone } from "lodash";
+import { fakeAddPlantProps } from "../../__test_support__/fake_props";
 
 describe("<ThreeDGarden />", () => {
   const fakeProps = (): ThreeDGardenProps => ({
     config: clone(INITIAL),
+    addPlantProps: fakeAddPlantProps([]),
+    mapPoints: [],
+    weeds: [],
   });
 
   it("renders", () => {

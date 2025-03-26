@@ -4,10 +4,6 @@ jest.mock("browser-speech", () => ({
   talk: jest.fn(),
 }));
 
-jest.mock("../open_farm/cached_crop", () => ({
-  cachedCrop: jest.fn(() => Promise.resolve({ svg_icon: "icon" })),
-}));
-
 const { ancestorOrigins } = window.location;
 delete (window as { location: Location | undefined }).location;
 window.location = {
@@ -17,7 +13,7 @@ window.location = {
   ancestorOrigins,
   pathname: "", href: "", hash: "", search: "",
   hostname: "", origin: "", port: "", protocol: "", host: "",
-};
+} as unknown as Location & string;
 
 console.error = jest.fn(); // enzyme
 
@@ -28,12 +24,7 @@ window.TextDecoder = jest.fn(() => ({
 }));
 
 jest.mock("../error_boundary", () => ({
-  ErrorBoundary: (p: { children: React.ReactChild }) => <div>{p.children}</div>,
-}));
-
-jest.mock("../history", () => ({
-  push: jest.fn(),
-  getPathArray: () => [],
+  ErrorBoundary: (p: { children: React.ReactNode }) => <div>{p.children}</div>,
 }));
 
 window.ResizeObserver = (() => ({
@@ -46,4 +37,16 @@ window.ResizeObserver = (() => ({
 jest.mock("@rollbar/react", () => ({
   Provider: ({ children }: { children: React.ReactNode }) =>
     <div className={"rollbar"}>{children}</div>,
+}));
+
+global.mockNavigate = jest.fn(() => jest.fn());
+
+jest.mock("react-router", () => ({
+  BrowserRouter: jest.fn(({ children }) => <div>{children}</div>),
+  MemoryRouter: jest.fn(({ children }) => <div>{children}</div>),
+  Route: jest.fn(({ children }) => <div>{children}</div>),
+  Routes: jest.fn(({ children }) => <div>{children}</div>),
+  useNavigate: () => mockNavigate,
+  Navigate: ({ to }: { to: string }) => <div>{mockNavigate(to)}</div>,
+  Outlet: jest.fn(() => <div />),
 }));

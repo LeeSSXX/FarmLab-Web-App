@@ -95,19 +95,23 @@ export const PublicOverlay = (props: OverlayProps) => {
           options={{
             "outdoor": "Outdoor",
             "lab": "Lab",
+            "greenhouse": "Greenhouse",
           }} />
       </div>}
     {config.promoInfo && !props.activeFocus &&
-      <PromoInfo isGenesis={config.sizePreset == "Genesis"} />}
+      <PromoInfo
+        isGenesis={config.sizePreset == "Genesis"}
+        kitVersion={config.kitVersion} />}
   </div>;
 };
 
 interface PromoInfoProps {
   isGenesis: boolean;
+  kitVersion: string;
 }
 
 const PromoInfo = (props: PromoInfoProps) => {
-  const { isGenesis } = props;
+  const { isGenesis, kitVersion } = props;
   return <div className="promo-info">
     <h2 className="title">Explore our models</h2>
     {isGenesis
@@ -118,7 +122,7 @@ const PromoInfo = (props: PromoInfoProps) => {
         <p className="full">
           FarmBot Genesis is our flagship kit for prosumers and enthusiasts
           featuring our most advanced technology, features, and options.
-          Coming 90% pre-assembled in the box, Genesis can be installed on
+          Coming 95% pre-assembled in the box, Genesis can be installed on
           an existing raised bed in an afternoon. It is suitable for fixed
           or mobile raised beds in classrooms, research labs, and backyards.
         </p>
@@ -139,13 +143,14 @@ const PromoInfo = (props: PromoInfoProps) => {
     <a className="buy-button"
       target="_top"
       href={isGenesis
-        ? ExternalUrl.Store.genesisKit
-        : ExternalUrl.Store.genesisXlKit}>
+        ? ExternalUrl.Store.genesisKit(kitVersion)
+        : ExternalUrl.Store.genesisXlKit(kitVersion)}>
       <p>Order Genesis</p>
       <p className="genesis-xl"
         style={{ display: isGenesis ? "none" : "inline-block" }}>
         XL
       </p>
+      <p style={{ textTransform: "none" }}>{kitVersion}</p>
     </a>
   </div>;
 };
@@ -280,13 +285,16 @@ export const PrivateOverlay = (props: OverlayProps) => {
         options={["Standard", "Mobile"]} />
       <Radio {...common} configKey={"otherPreset"}
         options={["Initial", "Minimal", "Maximal", "Reset all"]} />
-      <label>{"Bot Position"}</label>
+      <label>{"Bot State"}</label>
       <Slider {...common} configKey={"x"} min={0} max={props.config.botSizeX} />
       <Slider {...common} configKey={"y"} min={0} max={props.config.botSizeY} />
       <Slider {...common} configKey={"z"} min={0} max={props.config.botSizeZ} />
-      <Radio {...common} configKey={"tool"} options={["rotaryTool", "None"]} />
+      <Radio {...common} configKey={"tool"}
+        options={["wateringNozzle", "rotaryTool", "soilSensor", "weeder",
+          "seeder", "None"]} />
       <Toggle {...common} configKey={"trail"} />
       <Toggle {...common} configKey={"laser"} />
+      <Toggle {...common} configKey={"waterFlow"} />
       <label>{"Bot Dimensions"}</label>
       <Slider {...common} configKey={"botSizeX"} min={0} max={6000} />
       <Slider {...common} configKey={"botSizeY"} min={0} max={4000} />
@@ -304,6 +312,8 @@ export const PrivateOverlay = (props: OverlayProps) => {
       <Toggle {...common} configKey={"tracks"} />
       <Toggle {...common} configKey={"cableCarriers"} />
       <Toggle {...common} configKey={"bot"} />
+      <Radio {...common} configKey={"distanceIndicator"}
+        options={["", "bedHeight", "beamLength", "columnLength", "zAxisLength"]} />
       <label>{"Bed Properties"}</label>
       <Slider {...common} configKey={"bedWallThickness"} min={0} max={200} />
       <Slider {...common} configKey={"bedHeight"} min={0} max={1000} />
@@ -327,7 +337,7 @@ export const PrivateOverlay = (props: OverlayProps) => {
       <Toggle {...common} configKey={"lowDetail"} />
       <label>{"Environment"}</label>
       <Radio {...common} configKey={"scene"}
-        options={["Outdoor", "Lab"]} />
+        options={["Outdoor", "Lab", "Greenhouse"]} />
       <Toggle {...common} configKey={"ground"} />
       <Toggle {...common} configKey={"grid"} />
       <Toggle {...common} configKey={"utilitiesPost"} />

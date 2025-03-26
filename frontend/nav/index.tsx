@@ -1,8 +1,7 @@
 import React from "react";
 import { NavBarProps, NavBarState } from "./interfaces";
 import { EStopButton } from "./e_stop_btn";
-import { Row, Col, Popover } from "../ui";
-import { push } from "../history";
+import { Popover } from "../ui";
 import { updatePageInfo } from "../util";
 import { validBotLocationData } from "../util/location";
 import { NavLinks } from "./nav_links";
@@ -34,6 +33,8 @@ import { PopupsState } from "../interfaces";
 import { Panel, TAB_ICON } from "../farm_designer/panel_header";
 import { movementPercentRemaining } from "../farm_designer/move_to";
 import { isMobile } from "../screen_size";
+import { NavigationContext } from "../routes_helpers";
+import { NavigateFunction } from "react-router";
 
 export class NavBar extends React.Component<NavBarProps, Partial<NavBarState>> {
   state: NavBarState = {
@@ -53,6 +54,10 @@ export class NavBar extends React.Component<NavBarProps, Partial<NavBarState>> {
       this.setState({ documentTitle: document.title });
     }
   };
+
+  static contextType = NavigationContext;
+  context!: React.ContextType<typeof NavigationContext>;
+  navigate: NavigateFunction = url => { this.context(url as string); };
 
   get isStaff() { return this.props.authAud == "staff"; }
 
@@ -139,7 +144,11 @@ export class NavBar extends React.Component<NavBarProps, Partial<NavBarState>> {
             onClick={this.toggle("accountMenuOpen")}>
             {firstName}
           </div>}
-        content={<AdditionalMenu close={this.close} isStaff={this.isStaff} />} />
+        content={<AdditionalMenu
+          close={this.close}
+          dispatch={this.props.dispatch}
+          darkMode={!!this.props.getConfigValue(BooleanSetting.dark_mode)}
+          isStaff={this.isStaff} />} />
     </div>;
   };
 
@@ -189,7 +198,7 @@ export class NavBar extends React.Component<NavBarProps, Partial<NavBarState>> {
     const { wizardStepResults, device } = this.props;
     return !device.body.setup_completed_at
       ? <a className={"setup-button"}
-        onClick={() => push(Path.setup())}>
+        onClick={() => { this.navigate(Path.setup()); }}>
         {t("Setup")}
         {!isMobile() &&
           `: ${setupProgressString(wizardStepResults, { firmwareHardware })}`}
@@ -244,12 +253,20 @@ export class NavBar extends React.Component<NavBarProps, Partial<NavBarState>> {
       <i className={"fa fa-bars mobile-menu-icon"}
         onClick={this.toggle("mobileMenuOpen")} />
       <span className="mobile-menu-container">
-        <MobileMenu close={this.close} alertCount={this.props.alertCount}
+        <MobileMenu
+          designer={this.props.designer}
+          dispatch={this.props.dispatch}
+          close={this.close}
+          alertCount={this.props.alertCount}
           mobileMenuOpen={this.state.mobileMenuOpen}
           helpState={this.props.helpState} />
       </span>
       <span className="top-menu-container">
-        <NavLinks close={this.close} alertCount={this.props.alertCount}
+        <NavLinks
+          designer={this.props.designer}
+          dispatch={this.props.dispatch}
+          close={this.close}
+          alertCount={this.props.alertCount}
           helpState={this.props.helpState} />
       </span>
     </div>;
@@ -274,29 +291,25 @@ export class NavBar extends React.Component<NavBarProps, Partial<NavBarState>> {
         this.isStaff ? "red" : "",
       ].join(" ")}>
         <nav role="navigation">
-          <Row>
-            <Col xs={12}>
-              <div className="nav-bar">
-                <this.TickerList />
-                <div className="nav-group">
-                  <div className="nav-left">
-                    <this.AppNavLinks />
-                  </div>
-                  <div className="nav-right">
-                    <ErrorBoundary>
-                      <this.ReadOnlyStatus />
-                      <this.AccountMenu />
-                      <this.EstopButton />
-                      <this.ConnectionStatus />
-                      <this.SetupButton />
-                      <this.JobsButton />
-                      <this.Coordinates />
-                    </ErrorBoundary>
-                  </div>
-                </div>
+          <div className="nav-bar">
+            <this.TickerList />
+            <div className="nav-group">
+              <div className="nav-left">
+                <this.AppNavLinks />
               </div>
-            </Col>
-          </Row>
+              <div className="nav-right">
+                <ErrorBoundary>
+                  <this.ReadOnlyStatus />
+                  <this.AccountMenu />
+                  <this.EstopButton />
+                  <this.ConnectionStatus />
+                  <this.SetupButton />
+                  <this.JobsButton />
+                  <this.Coordinates />
+                </ErrorBoundary>
+              </div>
+            </div>
+          </div>
         </nav>
       </div>
     </ErrorBoundary>;
